@@ -2,7 +2,6 @@ from dotenv import load_dotenv
 import os
 from riotwatcher import LolWatcher, ApiError
 
-
 load_dotenv()
 
 token = os.getenv('TOKEN')
@@ -43,29 +42,32 @@ class Summoner:
         self.accountId =lol_watcher.summoner.by_name(f'{region}', f'{name}')['accountId']
         self.puuid = lol_watcher.summoner.by_name(f'{region}', f'{name}')['puuid']
 
+#delete these
 #Envoker = Summoner('na1','Envoker')
 #test match NA1_4628282743
 Envoker_puuid = 'g1acCFkH_VkgESCpvkscbSiL_2UEuwZ-fyARdTryMHd71xDyXyiqXPishGrQUJh7h5pfFNj_SSRpWA'
+#delete these
 
 def get_matches(puuid:str,region='na1',number=10):
-    response = lol_watcher.match.matchlist_by_puuid(puuid=puuid,region=region,count=number)
-    error_wrapper(response)
-
+    return lol_watcher.match.matchlist_by_puuid(puuid=puuid,region=region,count=number)
+    
 def get_match_tl(match_id:str, region='na1'):
-    response = lol_watcher.match.timeline_by_match(region=region,match_id=match_id)
-    error_wrapper(response)
+    return lol_watcher.match.timeline_by_match(region=region,match_id=match_id)
 
+def get_cs(minute:int,puuid:str,match_id:str):
+    #find a way to move match outside of get_cs so I do not need to call the API 
+    # every time I call the function
+    match = get_match_tl(match_id=match_id)
+    player = match['metadata']['participants'].index(puuid)
+    cs_at = match['info']['frames'][minute]['participantFrames'][f'{player}']['minionsKilled']
+    return(cs_at)
+
+#Delete these    
 #print(get_matches(puuid=Envoker_puuid,number=1))
 #print(get_match_tl(match_id='NA1_4628282743'))
+#delete these
 
-#def get_cs():
-    # totalMinionsKilled
+print(get_cs(10,Envoker_puuid,match_id='NA1_4628282743'))
 
-def get_cs(minute,participant,match_id:str):
-    match = get_match_tl(match_id=match_id)
-    #participants = match['metadata']['participants']
-    print(type(match))
-    
-    
-get_cs(1,1,match_id='NA1_4628282743')
+#Next step is probably to use these in CS_TRACK
 
