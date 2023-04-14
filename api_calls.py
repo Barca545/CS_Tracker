@@ -8,7 +8,7 @@ token = os.getenv('TOKEN')
 #why does placing the value of token here not work?
 lol_watcher = LolWatcher(f'{token}')
 
-# testregion is 'na1'
+#testregion is 'na1'
 #test matchid 4628282743
 
 def error_wrapper(response):
