@@ -42,12 +42,6 @@ class Summoner:
         self.accountId =lol_watcher.summoner.by_name(f'{region}', f'{name}')['accountId']
         self.puuid = lol_watcher.summoner.by_name(f'{region}', f'{name}')['puuid']
 
-#delete these
-#Envoker = Summoner('na1','Envoker')
-#test match NA1_4628282743
-Envoker_puuid = 'g1acCFkH_VkgESCpvkscbSiL_2UEuwZ-fyARdTryMHd71xDyXyiqXPishGrQUJh7h5pfFNj_SSRpWA'
-#delete these
-
 def get_matches(puuid:str,region='na1',number=10):
     return lol_watcher.match.matchlist_by_puuid(puuid=puuid,region=region,count=number)
     
@@ -66,8 +60,5 @@ def get_gametime(match):
         gametime.append(i)
     return(gametime)
 
-test_match = get_match_tl(match_id='NA1_4628282743')
-get_gametime(test_match)
-print(get_cs(test_match,10,Envoker_puuid))
 
 
