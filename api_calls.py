@@ -54,20 +54,20 @@ def get_matches(puuid:str,region='na1',number=10):
 def get_match_tl(match_id:str, region='na1'):
     return lol_watcher.match.timeline_by_match(region=region,match_id=match_id)
 
-def get_cs(minute:int,puuid:str,match_id:str):
-    #find a way to move match outside of get_cs so I do not need to call the API 
-    # every time I call the function
-    match = get_match_tl(match_id=match_id)
+def get_cs(match,minute:int,puuid:str):
     player = match['metadata']['participants'].index(puuid)
     cs_at = match['info']['frames'][minute]['participantFrames'][f'{player}']['minionsKilled']
     return(cs_at)
 
-#Delete these    
-#print(get_matches(puuid=Envoker_puuid,number=1))
-#print(get_match_tl(match_id='NA1_4628282743'))
-#delete these
+def get_gametime(match):
+    duration = len(match['info']['frames'])
+    gametime = []
+    for i in range(duration):
+        gametime.append(i)
+    return(gametime)
 
-print(get_cs(10,Envoker_puuid,match_id='NA1_4628282743'))
+test_match = get_match_tl(match_id='NA1_4628282743')
+get_gametime(test_match)
+print(get_cs(test_match,10,Envoker_puuid))
 
-#Next step is probably to use these in CS_TRACK
 
