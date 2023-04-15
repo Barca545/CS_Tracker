@@ -1,5 +1,5 @@
 from pandas import DataFrame as df
-from backend.src.api_calls import get_cs,get_match_tl,get_gametime
+from api_calls import get_cs,get_match_tl,get_gametime
 
 #delete these when done with testing
 test_match = get_match_tl(match_id='NA1_4628282743')
@@ -31,6 +31,7 @@ def problem_delta_CS(match,puuid:str,target=4):
 def cs_15(match,puuid):
     return get_cs(match=match,minute=15,puuid=puuid)
 
+#delete these when done with testing
 print(total_delta_CS(test_match,Envoker_puuid))
 print(problem_delta_CS(test_match,Envoker_puuid))
 print(cs_15(test_match,Envoker_puuid))
