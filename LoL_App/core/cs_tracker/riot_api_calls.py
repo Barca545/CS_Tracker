@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 from riotwatcher import LolWatcher, ApiError
+from pandas import DataFrame as df
 
 load_dotenv()
 
@@ -9,7 +10,6 @@ token = os.getenv('TOKEN')
 lol_watcher = LolWatcher(f'{token}')
 
 #testregion is 'na1'
-#test matchid 4628282743
 
 def error_wrapper(response):
     try: 
@@ -36,11 +36,35 @@ def error_wrapper(response):
             raise
 
 class Summoner:
-    def __init__(self,region:str,name:str):
-        self.summonerInfo = lol_watcher.summoner.by_name(f'{region}', f'{name}')
-        self.id = lol_watcher.summoner.by_name(f'{region}', f'{name}')['id']
-        self.accountId =lol_watcher.summoner.by_name(f'{region}', f'{name}')['accountId']
-        self.puuid = lol_watcher.summoner.by_name(f'{region}', f'{name}')['puuid']
+    def __init__(self,region:str,summonername:str):
+        summoner_dto = lol_watcher.summoner.by_name(f'{region}', f'{summonername}')
+        self.puuid = summoner_dto(f'{region}', f'{summonername}')['puuid']
+        #add stuff like rank, icon, etc    
+
+class Match:
+    def __init__(self,match_id:str,region:str):
+        self.match_id = match_id
+        self.match_dto = lol_watcher.match.by_id(region,match_id)
+    
+    def get_summoner_list(self):
+        summoners = self.match_dto['info']['participants']
+        summonerlist = {}
+        for i in range(0,9):
+            summoner = summoners[i]
+            summonerlist[i] = {
+                'name':summoner['summonerName'],
+                'kills':summoner['kills'],
+                'deaths' : summoner['deaths'],
+                'assists' : summoner['assists'],
+                'kda': summoner['challenges']['kda'],
+                'role' : summoner['role'],
+                'champion' : summoner['championName'],
+                'items':[summoner['item0'],summoner['item1'],summoner['item2'],summoner['item3'],summoner['item4'],summoner['item5'],summoner['item6']]
+                }
+        return summonerlist
+    
+test_list = Match('NA1_4628282743','na1').get_summoner_list()
+print(test_list)
 
 def get_matches(puuid:str,region='na1',number=10):
     return lol_watcher.match.matchlist_by_puuid(puuid=puuid,region=region,count=number)
@@ -59,6 +83,32 @@ def get_gametime(match):
     for i in range(duration):
         gametime.append(i)
     return(gametime)
+
+def total_delta_CS(match,match_id:str,puuid:str):
+    frames = get_gametime(match)
+    cs_graph_ls = []
+    for frame in frames: 
+        cs_at = get_cs(match=match,minute=frame,puuid=puuid)
+        Δ_cs = cs_at-get_cs(match=match,minute=frame-1,puuid=puuid)
+        cs_graph_ls.append([frame,cs_at,Δ_cs,match_id])
+    cs_graph = df(cs_graph_ls,columns=['Time','CS@','ΔCSPM','Match ID'])  
+    cs_graph.at[0,'ΔCSPM'] = 0
+    return(cs_graph)
+
+def problem_delta_CS(match,match_id:str,puuid:str,target=4):
+    frames = get_gametime(match)
+    cs_graph_ls = []   
+    for frame in frames: 
+        cs_at = get_cs(match=match,minute=frame,puuid=puuid)
+        Δ_cs = cs_at-get_cs(match=match,minute=frame-1,puuid=puuid)
+        if frame > 2 and Δ_cs < target:
+            cs_graph_ls.append([frame,cs_at,Δ_cs,match_id])
+    cs_graph = df(cs_graph_ls,columns=['Time','CS@','ΔCSPM','Match ID'])  
+    cs_graph.at[0,'ΔCSPM'] = 0
+    return(cs_graph)
+
+def cs_15(match,puuid):
+    return get_cs(match=match,minute=15,puuid=puuid)
 
 
 
