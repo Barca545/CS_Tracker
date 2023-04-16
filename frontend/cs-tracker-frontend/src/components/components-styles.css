@@ -1,12 +1,16 @@
 .results-header{
     font-size: 30px; /* make not change when font changes*/
+    text-align: center;
 }
 
 .search-form-item{
     padding: 5px;
 }
 
-.results-graph-wrapper{
+.results-wrapper{
+    text-align: left;
+}
+.results-graph{
     border-style: solid;
     border-width: 5px; 
     height: 50px;
