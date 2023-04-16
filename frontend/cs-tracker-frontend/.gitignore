@@ -9,7 +9,9 @@
 /coverage
 
 # production
-/build
+#/build 
+
+#apparently need to not gitignore this for the app to work
 
 # misc
 .DS_Store
