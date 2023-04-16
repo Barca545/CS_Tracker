@@ -16,9 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from core.views import front
+from core.views import * #Specify once done
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", front, name="front"),
+    path("cs_data/", cs_data, name="cs_data"),
+    path("cs_data/<str:match_id>", cs_data_detail, name="detail"),
+    path("player/", player, name="player"),
+    path("player/<str:match_id>", player_detail, name="detail"),
 ]
