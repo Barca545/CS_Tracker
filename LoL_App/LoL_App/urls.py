@@ -26,4 +26,7 @@ urlpatterns = [
     path("player/", player, name="player"),
     path("player/<str:match_id>", player_detail, name="detail"),
     path("matchlist/<summonername>/<region>/<number>/", matchlist, name="matchlist"),
+    path("delta_cs/<match_id>/<puuid>/<region>/", delta_cs, name="delta_cs"),
+    path("problem_delta_cs/<match_id>/<puuid>/<region>/", problem_delta_cs, name="problem_delta_cs"),
+    path("cs_15/<match_id>/<puuid>/<region>/", cs_15, name="cs_15"),
 ]

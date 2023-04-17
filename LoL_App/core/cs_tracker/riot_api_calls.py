@@ -66,7 +66,7 @@ class Match:
 def get_matches(puuid:str,region='na1',number=10):
     return lol_watcher.match.matchlist_by_puuid(puuid=puuid,region=region,count=number)
     
-def get_match_tl(match_id:str, region='na1'):
+def get_match_tl(match_id:str, region:str):
     return lol_watcher.match.timeline_by_match(region=region,match_id=match_id)
 
 def get_cs(match,minute:int,puuid:str):
@@ -81,31 +81,32 @@ def get_gametime(match):
         gametime.append(i)
     return(gametime)
 
-def total_delta_CS(match,match_id:str,puuid:str):
+def total_delta_CS(match,puuid:str):
     frames = get_gametime(match)
-    cs_graph_ls = []
+    match_id = match['metadata']['matchId']
+    cs = {}
     for frame in frames: 
         cs_at = get_cs(match=match,minute=frame,puuid=puuid)
-        Δ_cs = cs_at-get_cs(match=match,minute=frame-1,puuid=puuid)
-        cs_graph_ls.append([frame,cs_at,Δ_cs,match_id])
-    cs_graph = df(cs_graph_ls,columns=['Time','CS@','ΔCSPM','Match ID'])  
-    cs_graph.at[0,'ΔCSPM'] = 0
+        delta_cs = cs_at-get_cs(match=match,minute=frame-1,puuid=puuid)
+        cs[frame] = {f'CS @ {frame}':cs_at, 'Delta CS':delta_cs}
+    cs[0] = {f'CS @ {0}':0,'Delta CS':0} #kinda ugly but whatever
+    cs_graph = {match_id:cs}
     return(cs_graph)
 
-def problem_delta_CS(match,match_id:str,puuid:str,target=4):
+def total_problem_delta_CS(match,puuid:str,target=4):
     frames = get_gametime(match)
-    cs_graph_ls = []   
+    match_id = match['metadata']['matchId']
+    cs = {}   
     for frame in frames: 
         cs_at = get_cs(match=match,minute=frame,puuid=puuid)
-        Δ_cs = cs_at-get_cs(match=match,minute=frame-1,puuid=puuid)
-        if frame > 2 and Δ_cs < target:
-            cs_graph_ls.append([frame,cs_at,Δ_cs,match_id])
-    cs_graph = df(cs_graph_ls,columns=['Time','CS@','ΔCSPM','Match ID'])  
-    cs_graph.at[0,'ΔCSPM'] = 0
+        delta_cs = cs_at-get_cs(match=match,minute=frame-1,puuid=puuid)
+        if frame > 2 and delta_cs < target:
+            cs[frame] = {f'CS @ {frame}':cs_at, 'Delta CS':delta_cs}
+    cs[0] = {f'CS @ {0}':0,'Delta CS':0} #kinda ugly but whatever
+    cs_graph = {match_id:cs}
     return(cs_graph)
 
-def cs_15(match,puuid):
-    return get_cs(match=match,minute=15,puuid=puuid)
+
 
 
 

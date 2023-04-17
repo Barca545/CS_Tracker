@@ -70,3 +70,23 @@ def matchlist(request,summonername='Envoker',region='na1',number=1):
         matches[match_id] = Match(match_id,region).get_summoner_list()  
     if request.method == 'GET':
         return JsonResponse(matches)
+
+@api_view(['GET'])
+def delta_cs(request,match_id,puuid,region='na1'):
+    match = get_match_tl(match_id,region) #could find a way to move this outside the function using state hooks and stuff
+    delta_cs = total_delta_CS(match,puuid) 
+    if request.method == 'GET':
+        return JsonResponse(delta_cs)
+
+@api_view(['GET']) #needs url
+def problem_delta_cs(request,match_id,puuid,region='na1'):
+    match = get_match_tl(match_id,region) #could find a way to move this outside the function using state hooks and stuff
+    problem_cs = total_problem_delta_CS(match,puuid) 
+    if request.method == 'GET':
+        return JsonResponse(problem_cs)
+
+@api_view('GET') #needs url
+def cs_15(request,match_id,puuid,region):
+    match = get_match_tl(match_id,region)
+    if request.method == 'GET':
+        return JsonResponse(get_cs(match=match,minute=15,puuid=puuid))

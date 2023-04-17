@@ -9,7 +9,9 @@ function SelectNumber(){
 
     function handleChange(newValue:any){setCurrentValue(newValue)}
     
-
+    /// use this function to get the matches and then use a state hook to display it in the box
+    /// at some point will need to figure out how to make the UI pretty by parsing the JSON
+    ///useState to set the name/puuid/region globally based on the value they search for.
     function getMatches(){
         axios({
             method: 'GET',
