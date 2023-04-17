@@ -85,7 +85,7 @@ def problem_delta_cs(request,match_id,puuid,region='na1'):
     if request.method == 'GET':
         return JsonResponse(problem_cs)
 
-@api_view('GET') #needs url
+@api_view(['GET']) 
 def cs_15(request,match_id,puuid,region):
     match = get_match_tl(match_id,region)
     if request.method == 'GET':
