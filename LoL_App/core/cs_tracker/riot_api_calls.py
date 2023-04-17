@@ -62,9 +62,6 @@ class Match:
                 'items':[summoner['item0'],summoner['item1'],summoner['item2'],summoner['item3'],summoner['item4'],summoner['item5'],summoner['item6']]
                 }
         return summonerlist
-    
-test_list = Match('NA1_4628282743','na1').get_summoner_list()
-print(test_list)
 
 def get_matches(puuid:str,region='na1',number=10):
     return lol_watcher.match.matchlist_by_puuid(puuid=puuid,region=region,count=number)

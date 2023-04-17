@@ -25,4 +25,5 @@ urlpatterns = [
     path("cs_data/<str:match_id>", cs_data_detail, name="detail"),
     path("player/", player, name="player"),
     path("player/<str:match_id>", player_detail, name="detail"),
+    path("matchlist/<summonername>/<region>/<number>/", matchlist, name="matchlist"),
 ]

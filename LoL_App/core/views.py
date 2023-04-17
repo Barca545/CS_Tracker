@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import *
 from .models import *
+from .cs_tracker.riot_api_calls import * 
+from django.http import JsonResponse
 
 # Create your views here.
 def front(request):
@@ -59,4 +61,12 @@ def player_detail(request, match_id):
         data.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)    
 
-def 
+@api_view(['GET'])
+def matchlist(request,summonername='Envoker',region='na1',number=1):
+    summonerpuuid = lol_watcher.summoner.by_name(f'{region}', f'{summonername}')['puuid']
+    matches_dto = get_matches(region=region,puuid=summonerpuuid,number=number)
+    matches = {}
+    for match_id in matches_dto:
+        matches[match_id] = Match(match_id,region).get_summoner_list()  
+    if request.method == 'GET':
+        return JsonResponse(matches)
