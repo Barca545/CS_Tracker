@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\jamar\Documents\Hobbies\Coding\CS_Tracker"
+VIRTUAL_ENV="C:\Users\Jamari\Documents\Hobbies\Coding\CS_Tracker"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
