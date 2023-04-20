@@ -48,6 +48,7 @@ export default function SearchMatch(props:any){
   /// figure out why this is void
   ///can try adding void to the approved types here LoL_App\frontend\src\components\search.tsx if nothing else succeeds but I do not think that is the problem
   /// possible solution here: https://github.com/axios/axios/issues/1510
+  
   function getMatches(name:string,region:string,number:any){
     axios({
       method: 'GET',
