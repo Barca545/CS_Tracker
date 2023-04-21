@@ -1,3 +1,4 @@
+
 from dotenv import load_dotenv
 import os
 from riotwatcher import LolWatcher, ApiError
@@ -105,8 +106,3 @@ def total_problem_delta_CS(match,puuid:str,target=4):
     cs[0] = {f'CS @ {0}':0,'Delta CS':0} #kinda ugly but whatever
     cs_graph = {match_id:cs}
     return(cs_graph)
-
-
-
-
-

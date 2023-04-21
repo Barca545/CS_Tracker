@@ -52,7 +52,8 @@ export default function SearchMatch(props:any){
   function getMatches(name:string,region:string,number:any){
     axios({
       method: 'GET',
-      url:`matchlist/${name}/${region}/${number}/`
+      url:`matchlist/Envoker/na1/46353218390/`
+      ///url:`matchlist/${name}/${region}/${number}/`
     }).then((response:any)=>{
         const matchlist = response.data
         setMatches(matchlist)
