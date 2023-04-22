@@ -1,4 +1,3 @@
-
 from dotenv import load_dotenv
 import os
 from riotwatcher import LolWatcher, ApiError
@@ -9,8 +8,6 @@ load_dotenv()
 token = os.getenv('TOKEN')
 #why does placing the value of token here not work?
 lol_watcher = LolWatcher(f'{token}')
-
-#testregion is 'na1'
 
 def error_wrapper(response):
     try: 

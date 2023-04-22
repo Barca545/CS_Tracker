@@ -7,7 +7,7 @@ import axios from "axios"
 import {MatchesContext} from './contexts'
 
 function App() {
-  const matches = useContext(MatchesContext)
+  const matches = useContext(MatchesContext) /// this may need to just be converted back into a hook
   return (
     <div className="App">
       <MatchesContext.Provider value={matches}>

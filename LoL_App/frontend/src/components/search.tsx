@@ -1,4 +1,3 @@
-import axios from "axios"
 import React, {useState,useEffect} from 'react';
 import './components-styles.css'; /// possibly delete
 /// delete react select from the project///
@@ -6,9 +5,8 @@ import './components-styles.css'; /// possibly delete
 
 ///Make selectNumber and selectRegion reset the selection value after they stop focusing the box. 
 ///onBlur does not seem to work
-
 function SelectNumber(props:any){
-  const [number,setNumber] = useState(props.number)    
+  const [number,setNumber] = useState(props.number) ///make an option to put in a custom number 
   return(
     <select className='number-of-selector' onChange={(e:any) => setNumber(e.target.value)} value={number}> 
       <option value='1'>Most recent</option>
@@ -41,7 +39,7 @@ function SelectRegion(props:any){
 ///use the event handler functions + hooks to set the selection values then 
 ///onsubmit call the getMatches function with name,number,region as args
 export default function SearchMatch(props:any){
-  const [matches, setMatches] = useState(props.matches)
+  
   const [name, setName] = useState('')
   var number = 1
   var region = 'na1'
@@ -49,22 +47,7 @@ export default function SearchMatch(props:any){
   ///can try adding void to the approved types here LoL_App\frontend\src\components\search.tsx if nothing else succeeds but I do not think that is the problem
   /// possible solution here: https://github.com/axios/axios/issues/1510
   
-  function getMatches(name:string,region:string,number:any){
-    axios({
-      method: 'GET',
-      url:`matchlist/Envoker/na1/46353218390/`
-      ///url:`matchlist/${name}/${region}/${number}/`
-    }).then((response:any)=>{
-        const matchlist = response.data
-        setMatches(matchlist)
-        console.log('success')///just for testing
-    }).catch((error) => {
-        if (error.response) {
-          console.log(error.response);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-          } 
-        })}
+  
   return(
     <div className='searchBar'>
       <form>
@@ -83,7 +66,7 @@ export default function SearchMatch(props:any){
           Select Region <SelectRegion region={region}/>
         </span>
         <span className='search-form-item'> 
-          <input type='submit'onSubmit={getMatches(name,region,number)}/>
+          <input type='submit'/>
         </span>
       </form>
     </div>        
