@@ -1,6 +1,7 @@
 import React, {useState,useEffect} from 'react';
 import './components-styles.css'; /// possibly delete
 /// delete react select from the project///
+import {useGetMatchList} from '../components/api/hooks/use-queries'
 
 
 ///Make selectNumber and selectRegion reset the selection value after they stop focusing the box. 
@@ -66,7 +67,7 @@ export default function SearchMatch(props:any){
           Select Region <SelectRegion region={region}/>
         </span>
         <span className='search-form-item'> 
-          <input type='submit'/>
+          <input type='submit' onSubmit={useGetMatchList}/> 
         </span>
       </form>
     </div>        

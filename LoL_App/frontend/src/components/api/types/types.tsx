@@ -17,7 +17,6 @@ export interface Match {
   } 
 
 export interface MatchList {
-  list: Match[] | never,
+  list: Match[],
   responseStatus: string | null
   }
- 
