@@ -1,20 +1,16 @@
-import React, {useState,useEffect} from 'react';
 import {get} from '../fetchers/fetchers';
 import {MatchList,Match} from '../types/types';
 
-export function useGetMatchList(props:any){
-  const [ matches, setMatches] = useState<Match[]>([]); /// possibly make this a hook in the App.tsx
-  
+
+/// This should be as an argument props:any
+export function useGetMatchList(region:String,name:String,number:Number){
+  let matches = {}
+
   const getMatches = async () => {
-    const { list } = await get<MatchList>('/matchlist/Envoker/na1/1/');///test url
-    ///const { list } = await get<MatchList>(`matchlist/${props.name}/${props.region}/${props.number}/`);///real url
-    setMatches(list)
-    console.log(matches)
+  const { list } = await get<MatchList>(`matchlist/${name}/${region}/${number}/`);
+  matches = list
+  console.log(matches)
   }
-
-  useEffect(() => {
-    getMatches()
-  }, [])
-
+  getMatches();
   return matches;
 }

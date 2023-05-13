@@ -2,6 +2,9 @@ import React, {useState,useEffect} from 'react';
 import './components-styles.css'; /// possibly delete
 /// delete react select from the project///
 import {useGetMatchList} from '../components/api/hooks/use-queries'
+///
+
+import { stringify } from 'querystring';
 
 
 ///Make selectNumber and selectRegion reset the selection value after they stop focusing the box. 
@@ -44,11 +47,14 @@ export default function SearchMatch(props:any){
   const [name, setName] = useState('')
   var number = 1
   var region = 'na1'
-  /// figure out why this is void
-  ///can try adding void to the approved types here LoL_App\frontend\src\components\search.tsx if nothing else succeeds but I do not think that is the problem
-  /// possible solution here: https://github.com/axios/axios/issues/1510
+  ///const data  = useGetMatchList()
+  ///if (data.length === 0 ) return null
   
-  
+  const handleSubmit = (region:string,name:string,number:number) => (e:any) =>{
+    e.preventDefault();
+    useGetMatchList(name,region,number)
+  }
+
   return(
     <div className='searchBar'>
       <form>
@@ -67,7 +73,7 @@ export default function SearchMatch(props:any){
           Select Region <SelectRegion region={region}/>
         </span>
         <span className='search-form-item'> 
-          <input type='submit' onSubmit={useGetMatchList}/> 
+          <input type='submit' onSubmit={() => handleSubmit(name, region, number)}/> 
         </span>
       </form>
     </div>        
