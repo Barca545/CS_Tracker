@@ -50,10 +50,8 @@ function SelectName(props:any){
 
 ///use the event handler functions + hooks to set the selection values then 
 export default function SearchMatch(props:any){
-  ///placeholder vars. How do I pass the state of the form components to the submit function
-  var name = 'Envoker'
-  var number = 1 
-  var region = 'na1'
+  ///Use Redux (https://react-redux.js.org/using-react-redux/usage-with-typescript) to manage the state between parent and children commponents.
+  ///Name/Region/Number can probably just be hooks but Matchlist should be redux
   
   ///const data  = useGetMatchList()
   ///if (data.length === 0 ) return null
