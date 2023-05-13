@@ -1,7 +1,6 @@
 from dotenv import load_dotenv
 import os
 from riotwatcher import LolWatcher, ApiError
-from pandas import DataFrame as df
 
 load_dotenv()
 
@@ -34,10 +33,20 @@ def error_wrapper(response):
             raise
 
 class Summoner:
-    def __init__(self,region:str,summonername:str):
-        summoner_dto = lol_watcher.summoner.by_name(f'{region}', f'{summonername}')
-        self.puuid = summoner_dto(f'{region}', f'{summonername}')['puuid']
-        #add stuff like rank, icon, etc    
+    def __init__(self,region:str,summoner_name:str):
+        self.summoner_name = summoner_name
+        self.region = region
+        summoner_dto = lol_watcher.summoner.by_name(f'{region}', f'{summoner_name}')
+        self.id = summoner_dto['id']
+        self.accountId = summoner_dto['accountId']
+        self.puuid = summoner_dto['puuid']
+        self.profileIconId = summoner_dto['profileIconId']
+        self.revisionDate = summoner_dto['revisionDate']
+        self.summonerLevel = summoner_dto['summonerLevel']
+
+    def get_matches(self,number=10):
+        self.puuid
+        return lol_watcher.match.matchlist_by_puuid(puuid=self.puuid,region=self.region,count=number)
 
 class Match:
     def __init__(self,match_id:str,region:str):
@@ -46,24 +55,22 @@ class Match:
     
     def get_summoner_list(self):
         summoners = self.match_dto['info']['participants']
+        # Currently glitches if for some reason a match has null participants. ARAMS will probably need to be handled separartely as well. Possibly do the following: if summoners is None or []: 
         summonerlist = {}
-        for i in range(0,9):
+        for i in range(2):
             summoner = summoners[i]
-            summonerlist[i] = {
-                'name':summoner['summonerName'],
+            summonerlist[summoner['summonerName']] = {
                 'kills':summoner['kills'],
-                'deaths' : summoner['deaths'],
-                'assists' : summoner['assists'],
-                'kda': summoner['challenges']['kda'],
-                'role' : summoner['role'],
-                'champion' : summoner['championName'],
+                'deaths':summoner['deaths'],
+                'assists':summoner['assists'],
+                'kda':summoner['challenges']['kda'],
+                'role':summoner['role'],
+                'champion':summoner['championName'],
                 'items':[summoner['item0'],summoner['item1'],summoner['item2'],summoner['item3'],summoner['item4'],summoner['item5'],summoner['item6']]
                 }
-        return summonerlist
+            return summonerlist
+        
 
-def get_matches(puuid:str,region='na1',number=10):
-    return lol_watcher.match.matchlist_by_puuid(puuid=puuid,region=region,count=number)
-    
 def get_match_tl(match_id:str, region:str):
     return lol_watcher.match.timeline_by_match(region=region,match_id=match_id)
 

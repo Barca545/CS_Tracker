@@ -1,10 +1,8 @@
 import React, {useState,useEffect} from 'react';
 import './components-styles.css'; /// possibly delete
 /// delete react select from the project///
-import {useGetMatchList} from '../components/api/hooks/use-queries'
-///
-
-import { stringify } from 'querystring';
+import {getMatchList} from '../components/api/hooks/use-queries'
+///import { stringify } from 'querystring';
 
 
 ///Make selectNumber and selectRegion reset the selection value after they stop focusing the box. 
@@ -40,31 +38,36 @@ function SelectRegion(props:any){
       <option value='vn2'>VN</option>
     </select>)}
 
-///use the event handler functions + hooks to set the selection values then 
-///onsubmit call the getMatches function with name,number,region as args
-export default function SearchMatch(props:any){
-  
+function SelectName(props:any){
   const [name, setName] = useState('')
-  var number = 1
+  return (<input 
+    className="text" 
+    type='select' 
+    placeholder="Search Summoner..." 
+    value={name}
+    onChange={(e)=>setName(e.target.value)}/>)
+}
+
+///use the event handler functions + hooks to set the selection values then 
+export default function SearchMatch(props:any){
+  ///placeholder vars. How do I pass the state of the form components to the submit function
+  var name = 'Envoker'
+  var number = 1 
   var region = 'na1'
+  
   ///const data  = useGetMatchList()
   ///if (data.length === 0 ) return null
   
   const handleSubmit = (region:string,name:string,number:number) => (e:any) =>{
     e.preventDefault();
-    useGetMatchList(name,region,number)
+    getMatchList(name,region,number)
   }
 
   return(
     <div className='searchBar'>
       <form>
         <span className='search-form-item'>
-          <input 
-            className="text" 
-            type='select' 
-            placeholder="Search Summoner..." 
-            value={name}
-            onChange={(e)=>setName(e.target.value)}/>
+          <SelectName name={name}/>
         </span>
         <span className='search-form-item'>
           Show: <SelectNumber number={number}/>

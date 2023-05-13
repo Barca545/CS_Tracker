@@ -62,12 +62,11 @@ def player_detail(request, match_id):
         return Response(status=status.HTTP_204_NO_CONTENT)    
 
 @api_view(['GET'])
-def matchlist(request,summonername='Envoker',region='na1',number=1):
-    summonerpuuid = lol_watcher.summoner.by_name(f'{region}', f'{summonername}')['puuid']
-    matches_dto = get_matches(region=region,puuid=summonerpuuid,number=number)
+def matchlist(request,summoner_name='Envoker',region='na1',number=1):
+    matches_dto = Summoner(summoner_name=summoner_name,region=region).get_matches(number=number)
     matches = {}
     for match_id in matches_dto:
-        matches[match_id] = Match(match_id,region).get_summoner_list()  
+        matches[match_id] = Match(match_id,region).get_summoner_list()
     if request.method == 'GET':
         return JsonResponse(matches)
 
