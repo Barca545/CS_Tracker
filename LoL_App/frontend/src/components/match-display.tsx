@@ -1,9 +1,7 @@
 import React, {useState,useEffect} from 'react';
 import './components-styles.css';
 
-function GameItem(props:any){
-    var matches = props.matches
-    
+function GameItem(){
     return(
         <div className='game-item'>
            <div className='content'>
@@ -18,7 +16,7 @@ function GameItem(props:any){
     )
 }
 
-export default function DisplayMatches(props:any){
+export default function DisplayMatches(){
     /* Use a for loop to load a GameItem for the number of matches the user selects*/ 
     return(
        <div className='match-display'> 
