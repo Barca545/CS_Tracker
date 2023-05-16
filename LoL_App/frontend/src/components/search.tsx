@@ -1,10 +1,11 @@
-import {useState,createContext} from 'react';
+import {useState} from 'react';
 import './components-styles.css'; /// possibly delete
+import {fetchMatchlist,selectMatchlist,getMatchlistStatus,getMatchlistError} from './api/matchlistSlice';
+import {useSelector} from 'react-redux'
+import dispatch from '../app/store'
 /// delete react select from the project///
-import {getMatchList} from '../components/api/hooks/use-queries'
 ///import { stringify } from 'querystring';
-import {Matchlistcontext} from '../contexts'
-
+///import {Matchlistcontext} from '../contexts'
 
 
 export default function SearchMatch(){
@@ -16,13 +17,19 @@ export default function SearchMatch(){
   ///make an option to put in a custom number 
   const [number,setNumber] = useState(1)
 
-  const [matchList,setMatchlist] = useState(null)///this may not be necesary
+  const matches = useSelector(selectMatchlist);
+  const status = useSelector(getMatchlistStatus);
+  const error = useSelector(getMatchlistError);
 
-  
   const handleSubmit = (region:string,summonername:string,number:number) => (e:any) => {
     e.preventDefault();
     console.log(summonername,region,number)
-    const matchlist = getMatchList(summonername,region,number)
+    const request = [region,summonername,number]
+    dispatch(
+      fetchMatchlist(request)
+      )
+    ///Needs to be changed to the redux reducer
+    ///const matchlist = getMatchlist(summonername,region,number)
     ///if (matchlist.length === 0 ) return null
   }
   ///the providers might have to cover the whole component not just submit. I am unsure.
@@ -65,9 +72,7 @@ export default function SearchMatch(){
             </select>
           </span>
           <span className='search-form-item'> 
-            <Matchlistcontext.Provider value={'return balue of handleSubmit'}>   
-              <input type='submit' onSubmit={() => handleSubmit(region,summonername,number)}/> 
-            </Matchlistcontext.Provider>    
+            <input type='submit' onSubmit={() => handleSubmit(region,summonername,number)}/>  
           </span>
         </form>
       </div>
