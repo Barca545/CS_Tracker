@@ -1,36 +1,30 @@
 import {useState} from 'react';
 import './components-styles.css'; /// possibly delete
-import {fetchMatchlist,selectMatchlist,getMatchlistStatus,getMatchlistError} from '../services/matchlistSlice';
-import {useSelector,useDispatch} from 'react-redux' 
 /// delete react select from the project///
-///import { stringify } from 'querystring';
-///import {Matchlistcontext} from '../contexts'
+import { useGetMatchlistQuery } from '../services/apiSlice';
+import {useDispatch,useSelector} from 'react-redux';
+import {setRegion,setSummonername,setNumber,selectRegion,selectSummonername,selectNumber} from '../slices/matchlistrequestSlice'
 
 
 export default function SearchMatch(){
-  const [summonername, setName] = useState('')
+  const dispatch = useDispatch();
   ///Make selectNumber and selectRegion reset the selection value after they stop focusing the box. 
   ///onBlur does not seem to work
-  const [region,setRegion] = useState('na1') ///NA is the default value does it show up this way? Eventually make it so it shows "Select Region" then add if/else logic to make it prompt the user to put in a region if they do not change it. 
-  ///Made these numbers instead of strings. Might cause an issue if other portions of the code are expecting strings — MUST CONFIRM.
   ///make an option to put in a custom number 
-  const [number,setNumber] = useState(1)
-
-  const dispatch = useDispatch<any>();
-
-  ///These need to be used to set up the messages it displays during loading. https://dev.to/ifeanyichima/what-is-createasyncthunk-in-redux--mhe perhaps I could store the logic in a function in matchlist slice and just import it from there.
-  ///const matches = useSelector(selectMatchlist);
-  ///const status = useSelector(getMatchlistStatus);
-  ///const error = useSelector(getMatchlistError);
   
-  const handleSubmit = (region:string,summonername:string,number:number) => (e:any) => {
-    e.preventDefault();
-    console.log(summonername,region,number)
+  const handleSubmit = () => {
+    ///e.preventDefault();
+    
+    ///this block seems really ineficcient is there really no way to just import the whoel state?
+    const region = useSelector(selectRegion)
+    const summonername = useSelector(selectSummonername)
+    const number = useSelector(selectNumber)
     const request = [region,summonername,number]
-    dispatch(
-      fetchMatchlist(request)
-      )
-    console.log('test')  ///this does not seem to work but it may be because I have to build it first. It may also be because of line 19
+
+    const {data, isLoading,isSuccess, isError, error} = useGetMatchlistQuery(request)
+    ///need to use booleans to control what it returns based on the value of getDefaultMiddleware.
+    console.log('test')
+    console.log(data)
   }
   return(
       <div className='searchBar'>
@@ -40,11 +34,10 @@ export default function SearchMatch(){
             className="text" 
             type='select' 
             placeholder="Search Summoner..." 
-            value={summonername}
-            onChange={(e)=>setName(e.target.value)}/>
+            onChange={(e)=>setSummonername(e.target.value)}/>
           </span>
           <span className='search-form-item'>
-            <select className='number-of-selector' value={region} onChange={(e:any) => setRegion(e.target.value)}> 
+            <select className='number-of-selector' onChange={(e:any) => setRegion(e.target.value)}> 
               <option value='na1'>NA</option>
               <option value='kr'>KR</option>
               <option value='oc1'>OCE</option>
@@ -63,7 +56,7 @@ export default function SearchMatch(){
             </select>
           </span>
           <span className="search-form-item">
-            <select className='number-of-selector' value={number} onChange={(e:any) => setNumber(e.target.value)} > 
+            <select className='number-of-selector' onChange={(e:any) => setNumber(e.target.value)} > 
               <option value={1}>Most recent</option>
               <option value={5}>Past five</option>
               <option value={10}>Past ten</option>
@@ -71,7 +64,7 @@ export default function SearchMatch(){
             </select>
           </span>
           <span className='search-form-item'> 
-            <input type='submit' onSubmit={() => handleSubmit(region,summonername,number)}/>  
+            <input type='submit' onSubmit={() => handleSubmit()}/>  
           </span>
         </form>
       </div>

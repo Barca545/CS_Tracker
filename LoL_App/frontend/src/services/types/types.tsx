@@ -1,3 +1,4 @@
+///https://redux-toolkit.js.org/rtk-query/usage-with-typescript
 interface SummonersList {
   name: string,
   kills: number,

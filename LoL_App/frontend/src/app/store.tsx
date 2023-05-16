@@ -1,12 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-///import thunkMiddleware from 'redux-thunk'; ///Used these solutions per other responses in this thread: https://stackoverflow.com/a/74857822 but they did not work.
-import {api} from '../services/api';
+import {apiSlice} from '../services/apiSlice';
+import { matchlistrequestSlice } from "../slices/matchlistrequestSlice";
 
 const store =  configureStore({
     reducer:{
-        [api.reducerPath]: api.reducer,
+        [apiSlice.reducerPath]: apiSlice.reducer,
+        matchlistrequest: matchlistrequestSlice.reducer
     },
-    middleware: (gDM) => gDM().concat(api.middleware), ///what does this line do?
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware),
 })
 
 export type RootState =  ReturnType<typeof store.getState>///what does this line do?
