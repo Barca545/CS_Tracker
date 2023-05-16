@@ -1,5 +1,4 @@
 import {useState} from 'react';
-import './components-styles.css'; /// possibly delete
 /// delete react select from the project///
 import { useGetMatchlistQuery } from '../services/apiSlice';
 import {useDispatch,useSelector} from 'react-redux';
@@ -8,20 +7,20 @@ import {setRegion,setSummonername,setNumber,selectRegion,selectSummonername,sele
 
 export default function SearchMatch(){
   const dispatch = useDispatch();
+  const region = useSelector(selectRegion)
+  const summonername = useSelector(selectSummonername)
+  const number = useSelector(selectNumber)
   ///Make selectNumber and selectRegion reset the selection value after they stop focusing the box. 
   ///onBlur does not seem to work
-  ///make an option to put in a custom number 
+  ///make an option to put in a custom number
+  const request = [region,summonername,number]
+  const {data, isLoading,isSuccess, isError, error} = useGetMatchlistQuery(request) 
   
-  const handleSubmit = () => {
+  const usehandleSubmit = () => {///had to make this a hook to resolve an error revert if problematic
     ///e.preventDefault();
-    
     ///this block seems really ineficcient is there really no way to just import the whoel state?
-    const region = useSelector(selectRegion)
-    const summonername = useSelector(selectSummonername)
-    const number = useSelector(selectNumber)
-    const request = [region,summonername,number]
 
-    const {data, isLoading,isSuccess, isError, error} = useGetMatchlistQuery(request)
+    
     ///need to use booleans to control what it returns based on the value of getDefaultMiddleware.
     console.log('test')
     console.log(data)
@@ -34,10 +33,10 @@ export default function SearchMatch(){
             className="text" 
             type='select' 
             placeholder="Search Summoner..." 
-            onChange={(e)=>setSummonername(e.target.value)}/>
+            onChange={(e)=> dispatch(setSummonername(e.target.value))}/>
           </span>
           <span className='search-form-item'>
-            <select className='number-of-selector' onChange={(e:any) => setRegion(e.target.value)}> 
+            <select className='number-of-selector' onChange={(e:any) => dispatch(setRegion(e.target.value))}> 
               <option value='na1'>NA</option>
               <option value='kr'>KR</option>
               <option value='oc1'>OCE</option>
@@ -56,7 +55,7 @@ export default function SearchMatch(){
             </select>
           </span>
           <span className="search-form-item">
-            <select className='number-of-selector' onChange={(e:any) => setNumber(e.target.value)} > 
+            <select className='number-of-selector' onChange={(e:any) => dispatch(setNumber(e.target.value))} > 
               <option value={1}>Most recent</option>
               <option value={5}>Past five</option>
               <option value={10}>Past ten</option>
@@ -64,7 +63,7 @@ export default function SearchMatch(){
             </select>
           </span>
           <span className='search-form-item'> 
-            <input type='submit' onSubmit={() => handleSubmit()}/>  
+            <input type='submit' onSubmit={() => usehandleSubmit()}/>  
           </span>
         </form>
       </div>

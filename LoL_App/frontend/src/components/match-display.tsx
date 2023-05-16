@@ -1,5 +1,4 @@
 import React from 'react'; ///do I need to do this?
-import './components-styles.css';
 import { useGetMatchlistQuery } from '../services/apiSlice';
 import { useSelector } from 'react-redux'
 import {selectRegion,selectSummonername,selectNumber} from '../slices/matchlistrequestSlice'
@@ -10,6 +9,7 @@ function GameItem(){
   const number = useSelector(selectNumber)
   const request = [region,summonername,number]
   const {isLoading, isSuccess,isError,error,} = useGetMatchlistQuery(request)
+  ///next step is figuring out how to destructure the JSON that results from the API request.
     
   return(
     <div className='game-item'>

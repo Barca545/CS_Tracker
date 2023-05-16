@@ -11,3 +11,4 @@ const store =  configureStore({
 })
 
 export type RootState =  ReturnType<typeof store.getState>///what does this line do?
+export default store
