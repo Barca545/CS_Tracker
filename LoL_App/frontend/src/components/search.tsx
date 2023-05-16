@@ -1,8 +1,7 @@
 import {useState} from 'react';
 import './components-styles.css'; /// possibly delete
 import {fetchMatchlist,selectMatchlist,getMatchlistStatus,getMatchlistError} from './api/matchlistSlice';
-import {useSelector} from 'react-redux'
-import dispatch from '../app/store'
+import {useSelector,useDispatch} from 'react-redux' 
 /// delete react select from the project///
 ///import { stringify } from 'querystring';
 ///import {Matchlistcontext} from '../contexts'
@@ -17,10 +16,13 @@ export default function SearchMatch(){
   ///make an option to put in a custom number 
   const [number,setNumber] = useState(1)
 
-  const matches = useSelector(selectMatchlist);
-  const status = useSelector(getMatchlistStatus);
-  const error = useSelector(getMatchlistError);
+  const dispatch = useDispatch<any>();
 
+  ///These need to be used to set up the messages it displays during loading. https://dev.to/ifeanyichima/what-is-createasyncthunk-in-redux--mhe perhaps I could store the logic in a function in matchlist slice and just import it from there.
+  ///const matches = useSelector(selectMatchlist);
+  ///const status = useSelector(getMatchlistStatus);
+  ///const error = useSelector(getMatchlistError);
+  
   const handleSubmit = (region:string,summonername:string,number:number) => (e:any) => {
     e.preventDefault();
     console.log(summonername,region,number)
@@ -28,11 +30,8 @@ export default function SearchMatch(){
     dispatch(
       fetchMatchlist(request)
       )
-    ///Needs to be changed to the redux reducer
-    ///const matchlist = getMatchlist(summonername,region,number)
-    ///if (matchlist.length === 0 ) return null
+    console.log('test')  
   }
-  ///the providers might have to cover the whole component not just submit. I am unsure.
   return(
       <div className='searchBar'>
         <form>
