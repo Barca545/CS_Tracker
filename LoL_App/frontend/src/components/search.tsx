@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import './components-styles.css'; /// possibly delete
-import {fetchMatchlist,selectMatchlist,getMatchlistStatus,getMatchlistError} from './api/matchlistSlice';
+import {fetchMatchlist,selectMatchlist,getMatchlistStatus,getMatchlistError} from '../services/matchlistSlice';
 import {useSelector,useDispatch} from 'react-redux' 
 /// delete react select from the project///
 ///import { stringify } from 'querystring';
@@ -30,7 +30,7 @@ export default function SearchMatch(){
     dispatch(
       fetchMatchlist(request)
       )
-    console.log('test')  
+    console.log('test')  ///this does not seem to work but it may be because I have to build it first. It may also be because of line 19
   }
   return(
       <div className='searchBar'>
