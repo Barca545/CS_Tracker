@@ -26,9 +26,9 @@ export const matchlistrequestSlice = createSlice({
 export const {setRegion,setSummonername,setNumber} = matchlistrequestSlice.actions
 
 ///reducers
-export const selectRegion = (state:any) => state.region.value ///is the state argument necessary here? Is it necesary to sa value here?
-export const selectSummonername = (state:any) => state.region.value ///is the state argument necessary here? Is it necesary to sa value here?
-export const selectNumber = (state:any) => state.region.value ///is the state argument necessary here? Is it necesary to sa value here?
+export const selectRegion = (state:any) => state.region///is the state argument necessary here? Is it necesary to sa value here?
+export const selectSummonername = (state:any) => state.summonername ///is the state argument necessary here? Is it necesary to sa value here?
+export const selectNumber = (state:any) => state.number ///is the state argument necessary here? Is it necesary to sa value here?
 ///I feel like there should be a way to use a selector to grab the whole slice instead of just individual values.
 
 export default matchlistrequestSlice.reducer
