@@ -15,7 +15,7 @@ const initialState: MatchlistRequestState = {
   matchlistresponse:null
 }
 
-export const matchlistrequestSlice = createSlice({
+export const matchlistSlice = createSlice({
   name:'matchlistrequest',
   initialState,   
   reducers: {
@@ -42,9 +42,9 @@ export const matchlistrequestSlice = createSlice({
   ///need a selector for grabbing the response to the url
 
 ///actions
-export const {setRegion,setSummonername,setNumber,setUrl} = matchlistrequestSlice.actions;
+export const {setRegion,setSummonername,setNumber,setUrl} = matchlistSlice.actions;
 
 ///reducers
-export default matchlistrequestSlice.reducer;
+export default matchlistSlice.reducer;
 ///I feel like there should be a way to use a selector to grab the whole slice instead of just individual values.
 

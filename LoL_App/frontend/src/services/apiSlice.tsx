@@ -1,4 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import {MatchlistRequestState} from '../components/search/matchlist-types'
+///selector for the URL and response to the URL
+import {} from '../components/search/matchlistSlice' 
 
 
 ///Can use this hook at the beginning of display/results to set the status of the component
