@@ -1,24 +1,23 @@
 import {useState} from 'react';
 /// delete react select from the project///
-import {useGetMatchlistQuery } from '../../services/apiSlice';
-import {setRegion,setSummonername,setNumber} from './matchlistrequestSlice'
-import {useAppSelector,useAppDispatch} from '../../app/hooks';
-
+///import {useGetMatchlistQuery } from '../../services/apiSlice';
+import {setUrl} from './matchlistSlice'
+import {useAppDispatch} from '../../app/hooks';
 
 export default function SearchMatch(){
   const dispatch = useAppDispatch();
-  const region = useAppSelector(state => state.matchlistrequest.region)
-  const summonername = useAppSelector(state => state.matchlistrequest.summonername)
-  const number = useAppSelector(state => state.matchlistrequest.number)
-  ///make an option to put in a custom number
-  const request = [region,summonername,number]
-  
+  const [region,setRegion] = useState('na1')
+  const [summonername,setSummonername] = useState('')
+  const [number,setNumber] = useState(1)
+  const [url,setNewUrl] = useState('')
+  ///this is where I dispatch the action https://stackoverflow.com/a/70211326
 
-  const usehandleSubmit = () => {
-    const {data, isLoading,isSuccess, isError, error} = useGetMatchlistQuery(request) 
-    console.log('test')
-    console.log(data)
+  function handleSubmit(region:string,summonername:string,number:number){
+    setNewUrl(`${region}/${summonername}/${number}/`);
+    dispatch(setUrl(url));
+    console.log(url)
   }
+
   return(
       <div className='searchBar'>
         <form>
@@ -27,10 +26,10 @@ export default function SearchMatch(){
             className="text" 
             type='select' 
             placeholder="Search Summoner..." 
-            onChange={(e)=> dispatch(setSummonername(e.target?.value))}/>
+            onChange={(e)=>setSummonername(e.target?.value)}/>
           </span>
           <span className='search-form-item'>
-            <select className='number-of-selector' onChange={(e) => dispatch(setRegion(e.target?.value))}> 
+            <select className='number-of-selector' onChange={(e)=>setRegion(e.target?.value)}> 
               <option value='na1'>NA</option>
               <option value='kr'>KR</option>
               <option value='oc1'>OCE</option>
@@ -49,7 +48,7 @@ export default function SearchMatch(){
             </select>
           </span>
           <span className="search-form-item">
-            <select className='number-of-selector' onChange={(e) => dispatch(setNumber(parseInt(e.target?.value)))} > 
+            <select className='number-of-selector' onChange={(e)=>setNumber(parseInt(e.target?.value))} > 
               <option value={1}>Most recent</option>
               <option value={5}>Past five</option>
               <option value={10}>Past ten</option>
@@ -57,7 +56,7 @@ export default function SearchMatch(){
             </select>
           </span>
           <span className='search-form-item'> 
-            <input type='submit' onSubmit={() => usehandleSubmit()}/>  
+            <input type='submit' onSubmit={() =>{handleSubmit(region,summonername,number)}}/>  
           </span>
         </form>
       </div>

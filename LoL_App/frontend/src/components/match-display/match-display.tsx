@@ -1,16 +1,13 @@
 import React from 'react'; ///do I need to do this?
 import { useGetMatchlistQuery } from '../../services/apiSlice';
-import { useSelector } from 'react-redux'
-import {selectRegion,selectSummonername,selectNumber} from '../search/matchlistrequestSlice'
 
 function GameItem(){
-  const region = useSelector(selectRegion)
-  const summonername = useSelector(selectSummonername)
-  const number = useSelector(selectNumber)
-  const request = [region,summonername,number]
-  const {isLoading, isSuccess,isError,error,} = useGetMatchlistQuery(request)
   ///next step is figuring out how to destructure the JSON that results from the API request.
-    
+  ///I do not need to use the selectors in the search since they are setting the value but I need to use them here to access
+    ///const region = useAppSelector(state => state.matchlistrequest.region)
+    ///const summonername = useAppSelector(state => state.matchlistrequest.summonername)
+    ///const number = useAppSelector(state => state.matchlistrequest.number)
+    ///const {data, isLoading,isSuccess, isError, error} = useGetMatchlistQuery<MatchlistRequest>([]) 
   return(
     <div className='game-item'>
       <div className='content'>

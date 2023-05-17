@@ -1,5 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
+
+///Can use this hook at the beginning of display/results to set the status of the component
+///just change it so that request is just a string and the string's value is of request url from the other slice
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({baseUrl:'matchlist/'}), ///how do I know what do use as the base URL?
