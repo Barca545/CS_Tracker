@@ -1,8 +1,8 @@
 import React from "react";
 import './App.css';
-import SearchMatch from './components/search'
-import DisplayMatches from './components/match-display'
-import Results from './components/results'
+import SearchMatch from './components/search/search'
+import DisplayMatches from './components/match-display/match-display'
+import Results from './components/results/results'
 
 function App() {
   return (

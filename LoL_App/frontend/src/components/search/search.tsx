@@ -1,27 +1,21 @@
 import {useState} from 'react';
 /// delete react select from the project///
-import { useGetMatchlistQuery } from '../services/apiSlice';
-import {useDispatch,useSelector} from 'react-redux';
-import {setRegion,setSummonername,setNumber,selectRegion,selectSummonername,selectNumber} from '../slices/matchlistrequestSlice'
+import {useGetMatchlistQuery } from '../../services/apiSlice';
+import {setRegion,setSummonername,setNumber} from './matchlistrequestSlice'
+import {useAppSelector,useAppDispatch} from '../../app/hooks';
 
 
 export default function SearchMatch(){
-  const dispatch = useDispatch();
-  const region = useSelector(selectRegion)
-  const summonername = useSelector(selectSummonername)
-  const number = useSelector(selectNumber)
-  ///Make selectNumber and selectRegion reset the selection value after they stop focusing the box. 
-  ///onBlur does not seem to work
+  const dispatch = useAppDispatch();
+  const region = useAppSelector(state => state.matchlistrequest.region)
+  const summonername = useAppSelector(state => state.matchlistrequest.summonername)
+  const number = useAppSelector(state => state.matchlistrequest.number)
   ///make an option to put in a custom number
   const request = [region,summonername,number]
-  const {data, isLoading,isSuccess, isError, error} = useGetMatchlistQuery(request) 
   
-  const usehandleSubmit = () => {///had to make this a hook to resolve an error revert if problematic
-    ///e.preventDefault();
-    ///this block seems really ineficcient is there really no way to just import the whoel state?
 
-    
-    ///need to use booleans to control what it returns based on the value of getDefaultMiddleware.
+  const usehandleSubmit = () => {
+    const {data, isLoading,isSuccess, isError, error} = useGetMatchlistQuery(request) 
     console.log('test')
     console.log(data)
   }
@@ -33,10 +27,10 @@ export default function SearchMatch(){
             className="text" 
             type='select' 
             placeholder="Search Summoner..." 
-            onChange={(e)=> dispatch(setSummonername(e.target.value))}/>
+            onChange={(e)=> dispatch(setSummonername(e.target?.value))}/>
           </span>
           <span className='search-form-item'>
-            <select className='number-of-selector' onChange={(e:any) => dispatch(setRegion(e.target.value))}> 
+            <select className='number-of-selector' onChange={(e) => dispatch(setRegion(e.target?.value))}> 
               <option value='na1'>NA</option>
               <option value='kr'>KR</option>
               <option value='oc1'>OCE</option>
@@ -55,7 +49,7 @@ export default function SearchMatch(){
             </select>
           </span>
           <span className="search-form-item">
-            <select className='number-of-selector' onChange={(e:any) => dispatch(setNumber(e.target.value))} > 
+            <select className='number-of-selector' onChange={(e) => dispatch(setNumber(parseInt(e.target?.value)))} > 
               <option value={1}>Most recent</option>
               <option value={5}>Past five</option>
               <option value={10}>Past ten</option>

@@ -1,7 +1,7 @@
 import React from 'react'; ///do I need to do this?
-import { useGetMatchlistQuery } from '../services/apiSlice';
+import { useGetMatchlistQuery } from '../../services/apiSlice';
 import { useSelector } from 'react-redux'
-import {selectRegion,selectSummonername,selectNumber} from '../slices/matchlistrequestSlice'
+import {selectRegion,selectSummonername,selectNumber} from '../search/matchlistrequestSlice'
 
 function GameItem(){
   const region = useSelector(selectRegion)
