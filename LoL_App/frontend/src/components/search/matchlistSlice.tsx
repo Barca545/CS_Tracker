@@ -1,5 +1,6 @@
 import { createSlice,PayloadAction} from '@reduxjs/toolkit'
 import {MatchlistRequestState} from './matchlist-types'
+import { RootState } from '../../app/store'
 
 ///I can import the api call here and save its value in the request's state
   ///I could probably just save the url here and throw it to an axios 
@@ -46,5 +47,10 @@ export const {setRegion,setSummonername,setNumber,setUrl} = matchlistSlice.actio
 
 ///reducers
 export default matchlistSlice.reducer;
+
+export function getURL(state:RootState){
+  let url = state.matchlist.requesturl;
+  return url
+}
 ///I feel like there should be a way to use a selector to grab the whole slice instead of just individual values.
 

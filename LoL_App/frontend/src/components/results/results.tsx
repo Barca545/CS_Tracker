@@ -1,5 +1,5 @@
 import React from 'react';
-
+///possibly just import this into the display (or vice versa) instead of importing both separately
 export default function Results(){
   return(
     <div className='results-wrapper'>

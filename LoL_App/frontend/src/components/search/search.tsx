@@ -12,12 +12,13 @@ export default function SearchMatch(){
   const [url,setNewUrl] = useState('')
   ///this is where I dispatch the action https://stackoverflow.com/a/70211326
 
-  function handleSubmit(region:string,summonername:string,number:number){
+  function handleSubmit(){
+    ///e.preventDefault(); ///is this necesary?
     setNewUrl(`${region}/${summonername}/${number}/`);
     dispatch(setUrl(url));
     console.log(url)
   }
-
+  ///need to add logic to the submit button to reset the fields.
   return(
       <div className='searchBar'>
         <form>
@@ -26,10 +27,11 @@ export default function SearchMatch(){
             className="text" 
             type='select' 
             placeholder="Search Summoner..." 
+            value={summonername}
             onChange={(e)=>setSummonername(e.target?.value)}/>
           </span>
           <span className='search-form-item'>
-            <select className='number-of-selector' onChange={(e)=>setRegion(e.target?.value)}> 
+            <select className='number-of-selector' value={region} onChange={(e)=>setRegion(e.target?.value)}> 
               <option value='na1'>NA</option>
               <option value='kr'>KR</option>
               <option value='oc1'>OCE</option>
@@ -48,7 +50,7 @@ export default function SearchMatch(){
             </select>
           </span>
           <span className="search-form-item">
-            <select className='number-of-selector' onChange={(e)=>setNumber(parseInt(e.target?.value))} > 
+            <select className='number-of-selector' value={number} onChange={(e)=>setNumber(parseInt(e.target?.value))} > 
               <option value={1}>Most recent</option>
               <option value={5}>Past five</option>
               <option value={10}>Past ten</option>
@@ -56,10 +58,9 @@ export default function SearchMatch(){
             </select>
           </span>
           <span className='search-form-item'> 
-            <input type='submit' onSubmit={() =>{handleSubmit(region,summonername,number)}}/>  
+            <input type={'button'} value={'Search'} onClick={()=>handleSubmit()}/>
           </span>
         </form>
-      </div>
-           
+      </div>           
   )
 }

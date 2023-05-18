@@ -1,7 +1,11 @@
-import React from 'react'; ///do I need to do this?
-import { useGetMatchlistQuery } from '../../services/apiSlice';
+import React from 'react'; ///do I need to import react?
+import { useGetMatchlistQuery } from '../../services/apiSlice';///might not need to import this
+import { getURL } from '../search/matchlistSlice';
+import { useAppSelector } from '../../app/hooks'; 
 
 function GameItem(){
+  const url = useAppSelector(getURL)
+
   ///next step is figuring out how to destructure the JSON that results from the API request.
   ///I do not need to use the selectors in the search since they are setting the value but I need to use them here to access
     ///const region = useAppSelector(state => state.matchlistrequest.region)
