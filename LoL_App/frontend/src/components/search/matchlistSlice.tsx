@@ -1,5 +1,5 @@
 import { createSlice,PayloadAction} from '@reduxjs/toolkit'
-import {MatchlistRequestState} from './matchlist-types'
+import {MatchlistRequestState} from '../../services/types/matchlist-types'
 
 ///I can import the api call here and save its value in the request's state
   ///I could probably just save the url here and throw it to an axios 
