@@ -1,17 +1,17 @@
 import React from 'react'; ///do I need to import react?
 import { useGetMatchlistQuery } from '../../services/apiSlice';///might not need to import this
 import { getURL } from '../search/matchlistSlice';
-import { useAppSelector } from '../../app/hooks'; 
+import { useAppSelector,useAppDispatch } from '../../app/hooks'; 
+import { getMatches } from '../../services/AxiosAPI/queries';
 
 function GameItem(){
   const url = useAppSelector(getURL)
-
+  const dispatch = useAppDispatch()
+  const loadMatchlist = () => {}
+    const matchlist = getMatches(url)
+    dispatch(matchlist)
   ///next step is figuring out how to destructure the JSON that results from the API request.
-  ///I do not need to use the selectors in the search since they are setting the value but I need to use them here to access
-    ///const region = useAppSelector(state => state.matchlistrequest.region)
-    ///const summonername = useAppSelector(state => state.matchlistrequest.summonername)
-    ///const number = useAppSelector(state => state.matchlistrequest.number)
-    ///const {data, isLoading,isSuccess, isError, error} = useGetMatchlistQuery<MatchlistRequest>([]) 
+  ///const {data, isLoading, isSuccess, isError, error} = useGetMatchlistQuery<MatchlistRequest>([]) 
   return(
     <div className='game-item'>
       <div className='content'>

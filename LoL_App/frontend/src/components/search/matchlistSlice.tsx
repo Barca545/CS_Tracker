@@ -1,5 +1,5 @@
 import { createSlice,PayloadAction} from '@reduxjs/toolkit'
-import {MatchlistRequestState} from './matchlist-types'
+import {MatchlistRequestState} from '../../services/types/matchlist-types'
 import { RootState } from '../../app/store'
 
 ///I can import the api call here and save its value in the request's state
