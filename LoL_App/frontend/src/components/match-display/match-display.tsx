@@ -1,13 +1,11 @@
 import React from 'react'; ///do I need to do this?
 import { useGetMatchlistQuery } from '../../services/apiSlice';
+import { getMatchlist} from '../search/matchlistSlice';
+import { useAppSelector,useAppDispatch } from '../../app/hooks'; 
 
 function GameItem(){
-  ///next step is figuring out how to destructure the JSON that results from the API request.
-  ///I do not need to use the selectors in the search since they are setting the value but I need to use them here to access
-    ///const region = useAppSelector(state => state.matchlistrequest.region)
-    ///const summonername = useAppSelector(state => state.matchlistrequest.summonername)
-    ///const number = useAppSelector(state => state.matchlistrequest.number)
-    ///const {data, isLoading,isSuccess, isError, error} = useGetMatchlistQuery<MatchlistRequest>([]) 
+  const matchlist = useAppSelector(getMatchlist)
+
   return(
     <div className='game-item'>
       <div className='content'>

@@ -1,5 +1,7 @@
 import { createSlice,PayloadAction} from '@reduxjs/toolkit'
 import {MatchlistRequestState} from '../../services/types/matchlist-types'
+import { RootState } from '../../app/store'
+import {useGetMatchlistQuery} from '../../services/apiSlice'
 
 ///I can import the api call here and save its value in the request's state
   ///I could probably just save the url here and throw it to an axios 
@@ -38,8 +40,16 @@ export const matchlistSlice = createSlice({
 })
 
 ///selectors
-  ///need a selector for grabbing the url
-  ///need a selector for grabbing the response to the url
+export function getMatchlist(state:RootState){///the matchlist slice versus the request slice might need to be a distinct one
+  const url = state.matchlist.requesturl
+  ///is there a way to initialize a variable without setting it to a value?
+  if (url !==null){
+    const matchlist = useGetMatchlistQuery(url).data
+    ///need this to return a JSON blob I can disambiguate into an array in the form of the Matchlist type
+    ///then in the match-list display thing I can make it so that it just calls matchlist.relevant.thing or whatever the object format for JS is
+  }
+  else {return null}
+}
 
 ///actions
 export const {setRegion,setSummonername,setNumber,setUrl} = matchlistSlice.actions;
