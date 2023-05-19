@@ -14,10 +14,11 @@ const initialState: MatchlistRequestState = {
     summonername:null,
     number:null},
   requesturl: null,
+  matchlistids: null,
   matchlistresponse:null
 }
 
-export const matchlistSlice = createSlice({
+export const matchlistRequestSlice = createSlice({
   name:'matchlistrequest',
   initialState,   
   reducers: {
@@ -33,28 +34,33 @@ export const matchlistSlice = createSlice({
     setUrl: (state,action:PayloadAction<string>) => {
       state.requesturl = action.payload
     },
-    setResponse:(state,action:PayloadAction<string>)=> {///The payload action needs to be a new type that is a destructured JSON api response.
-      state.requesturl = action.payload
+    setMatchIds:(state,action:PayloadAction<Array<string>>)=> {///The payload action needs to be a new type that is a destructured JSON api response.
+      state.matchlistids = action.payload
     },
 }
 })
 
 ///selectors
-export function getMatchlist(state:RootState){///the matchlist slice versus the request slice might need to be a distinct one
-  const url = state.matchlist.requesturl
-  ///is there a way to initialize a variable without setting it to a value?
+export function getRequestUrl(state:RootState){///the matchlist slice versus the request slice might need to be a distinct one
+  const url = state.matchlistrequest.requesturl
+  ///this needs to be in a component. 
+  ///Maybe I call it in search and then dispatch the result to the matchlist
   if (url !==null){
-    const matchlist = useGetMatchlistQuery(url).data
-    ///need this to return a JSON blob I can disambiguate into an array in the form of the Matchlist type
-    ///then in the match-list display thing I can make it so that it just calls matchlist.relevant.thing or whatever the object format for JS is
+    const matchlist = useGetMatchlistQuery(url).data 
+    console.log(matchlist)
   }
   else {return null}
 }
 
+export function getMatchIds(state:RootState){
+  const ids = state.matchlistrequest.matchlistids  
+  return ids
+}
+
 ///actions
-export const {setRegion,setSummonername,setNumber,setUrl} = matchlistSlice.actions;
+export const {setRegion,setSummonername,setNumber,setUrl} = matchlistRequestSlice.actions;
 
 ///reducers
-export default matchlistSlice.reducer;
+export default matchlistRequestSlice.reducer;
 ///I feel like there should be a way to use a selector to grab the whole slice instead of just individual values.
 
