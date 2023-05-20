@@ -21,4 +21,5 @@ export const apiSlice = createApi({
   }),
 })
 
-export const {useGetMatchlistQuery,useGetMatchInfoQuery} = apiSlice
+export const useGetMatchlistQuery = apiSlice.endpoints.getMatchlist.useQuery
+export const useGetMatchInfoQuery = apiSlice.endpoints.getMatchInfo.useQuery
