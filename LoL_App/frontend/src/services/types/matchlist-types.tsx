@@ -45,7 +45,10 @@ export interface Match {
 
 export interface MatchListState {
   match_id: string|null,
-  summoners_list: {
+  duration: string|number|null,///Idk what data type it is so update when I figure out
+  game_type: string|null,
+  kda: string|null, ///Should be the KDA of the summoner making the request
+  summoners_list: [
     summoner1: {
       name:string|null,
       kills: number|null,
@@ -55,6 +58,7 @@ export interface MatchListState {
       role: string|null
       champion: string|null,
       items: Array<number>|null,
+      spells:Array<string>|null,
     },
     summoner2: {
       name:string|null,
@@ -65,6 +69,7 @@ export interface MatchListState {
       role: string|null
       champion: string|null,
       items: Array<number>|null,
+      spells:Array<string>|null,
     },
     summoner3: {
       name:string|null,
@@ -85,6 +90,7 @@ export interface MatchListState {
       role: string|null
       champion: string|null,
       items: Array<number>|null,
+      spells:Array<string>|null,
     },
     summoner5: {
       name:string|null,
@@ -95,6 +101,7 @@ export interface MatchListState {
       role: string|null
       champion: string|null,
       items: Array<number>|null,
+      spells:Array<string>|null,
     },
     summoner6: {
       name:string|null,
@@ -105,6 +112,7 @@ export interface MatchListState {
       role: string|null
       champion: string|null,
       items: Array<number>|null,
+      spells:Array<string>|null,
     },
     summoner7: {
       name:string|null,
@@ -115,6 +123,7 @@ export interface MatchListState {
       role: string|null
       champion: string|null,
       items: Array<number>|null,
+      spells:Array<string>|null,
     },
     summoner8: {
       name:string|null,
@@ -125,6 +134,7 @@ export interface MatchListState {
       role: string|null
       champion: string|null,
       items: Array<number>|null,
+      spells:Array<string>|null,
     },
     summoner9: {
       name:string|null,
@@ -135,6 +145,7 @@ export interface MatchListState {
       role: string|null
       champion: string|null,
       items: Array<number>|null,
+      spells:Array<string>|null,
     },
     summoner10: {
       name:string|null,
@@ -145,6 +156,7 @@ export interface MatchListState {
       role: string|null
       champion: string|null,
       items: Array<number>|null,
+      spells:Array<string>|null,
     }
-  },
+  ],
   responseStatus: string|null}
