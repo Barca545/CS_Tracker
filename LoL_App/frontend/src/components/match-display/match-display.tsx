@@ -3,46 +3,46 @@ import React, {useState} from 'react'; ///do I need to do this?
 import { useAppSelector} from '../../app/hooks'; 
 import {useGetMatchInfoQuery} from '../../services/apiSlice';
 import {getMatchIds} from '../../components/search/matchlistRequestSlice'
-import {MatchListState} from '../../services/types/matchlist-types'
+import {MatchItem} from '../../services/types/matchlist-types'
 
-///so each div has a match ID as its value 
+///so each div has a match ID as its value [key?]
 ///when a div is made, it sends a request to the API to get data for its data and 
 ///then sets a state to the result of making an api request for that specific ID's match data
 
-function GameItem(props:any){ 
-  ///const matchinfo = useGetMatchInfoQuery(id)
-  ///here set the match info to the result of calling for the match info for the given game id
-  const info = useGetMatchInfoQuery(props.id).data ///info should be a JS object pulled from the JSON resposne to the API call
-  const matchlistobject:MatchListState = JSON.parse(info)
-  ///need to add these data requests to the matchlist type and to the URL  
-  ///
-  function SummonerInfo(props:any){///why is this returning void?
-    ///matchlistobject.summoners_list.forEach()///Map should have an argument I can call below instead of '1'
-    return(
-      <div className='match-players'>{/* Make this div expand onClick*/}
-        <div>Items: {matchlistobject.summoners_list[props.summoner].items}</div>
-        <div>Summoner Spells: {matchlistobject.summoners_list[props.summoner].spells}</div> 
-        <div>KDA: {matchlistobject.summoners_list[props.summoner].kda}</div>
-      </div>
-    )}
-  return(
-      <div className='game-item'>
-        <div className='content'>
-          <div className='player-match-stats'>
-            <div>Match ID: {matchlistobject.match_id}</div>
-            <div>Game Duration: {matchlistobject.duration}</div>
-            <div>Game Type: {matchlistobject.game_type}</div>
-            <div>KDA: {matchlistobject.kda}</div>
-            <div>CSPM </div>
-          </div>
-          <div>
-            <SummonerInfo/>
-          </div>
-        </div>     
-      </div>
-  )
-}
 
+///here set the match info to the result of calling for the match info for the given game id
+const id='rtherhwea'///need to get the id from wherever it is stored.
+const matchinfo = useGetMatchInfoQuery(id).data ///info should be a JS object pulled from the JSON resposne to the API call
+const match:MatchItem = JSON.parse(matchinfo)
+///need to add matchid, game duration,game type and whatever other info is on the matchitem type to the URL  
+  
+
+  function GameItem(props:any){
+    return(
+      <div className='game-item'>
+        <div className='player-match-stats'>
+          <div>Match ID: {match.match_id}</div>
+          <div>Game Duration: {match.duration}</div>
+          <div>Game Type: {match.game_type}</div>
+          <div>KDA: {match.kda}</div>
+          <div>CSPM </div>
+        </div>
+        <SummonerInfo></SummonerInfo>
+      </div> 
+      
+  )
+  }
+function SummonerInfo(){
+  return(
+    match.summoners_list.map(summoner => (
+      <div className='match-players' key={summoner.name}>
+        <div>Items: {summoner.items}</div>
+        <div>Summoner Spells: {summoner.spells}</div> 
+        <div>KDA: {summoner.kda}</div>
+      </div>
+  ))
+)}
+  
 export default function DisplayMatches(){
   /* Use a for loop to load a GameItem for the number of matches the user selects*/
   const ids = useAppSelector(getMatchIds) 
