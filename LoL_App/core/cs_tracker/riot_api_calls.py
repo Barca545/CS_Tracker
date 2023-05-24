@@ -69,7 +69,8 @@ class Match:
                 'items':[summoner['item0'],summoner['item1'],summoner['item2'],summoner['item3'],summoner['item4'],summoner['item5'],summoner['item6']]
                 }
             return summonerlist
-        
+    def get_kda(self):
+      kda = self.match_dto['info']['participants']      
 
 def get_match_tl(match_id:str, region:str):
     return lol_watcher.match.timeline_by_match(region=region,match_id=match_id)

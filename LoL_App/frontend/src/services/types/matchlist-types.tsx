@@ -58,11 +58,11 @@ export interface Match {
     duration: string|number|null,///Idk what data type it is so update when I figure out
     game_type: string|null,
     kda: string|null, ///Should be the KDA of the summoner making the request
-    cspm: number|null,
     summoners_list: Array<summoner>,
     responseStatus: string|null,
   }
 
   export interface MatchList{
-    list:Array<MatchItem>
+    list:Array<MatchItem>,
+    responseStatus: string|null
   } ///For now my solution works but eventually make it so that when I pull the matches instead of pulling it match by match I call it this way

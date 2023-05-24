@@ -43,13 +43,7 @@ export const matchlistRequestSlice = createSlice({
 ///selectors
 export function getRequestUrl(state:RootState){///the matchlist slice versus the request slice might need to be a distinct one
   const url = state.matchlistrequest.requesturl
-  ///this needs to be in a component. 
-  ///Maybe I call it in search and then dispatch the result to the matchlist
-  if (url !==null){
-    const matchlist = useGetMatchlistQuery(url).data 
-    console.log(matchlist)
-  }
-  else {return null}
+  return url
 }
 
 export function getMatchIds(state:RootState){

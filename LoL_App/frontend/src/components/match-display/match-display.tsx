@@ -10,10 +10,10 @@ import {MatchItem,MatchList} from '../../services/types/matchlist-types'
 
 ///need to add matchid, game duration,game type and whatever other info is on the matchitem type to the URL  
 export default function DisplayMatches(){
-  ///const ids = useAppSelector(getMatchIds)
   const url = useAppSelector(getRequestUrl)
+  const matchlist:MatchList = useGetMatchlistQuery(url).data
+  
   if (url != null) {
-    const matchlist:MatchList = JSON.parse(useGetMatchlistQuery(url).data)
     return(
       <div className='match-display'> 
         <div className='summoner-info'>
@@ -38,7 +38,6 @@ function GameItem(props:any){
         <div>Game Duration: {matchitem.duration}</div>
         <div>Game Type: {matchitem.game_type}</div>
         <div>KDA: {matchitem.kda/*grab the info of the summoner we are looking for idk how*/}</div>
-        <div>CSPM: {matchitem.cspm/*grab the info of the summoner we are looking for idk how*/} </div>
       </div>
       <div className='more-info'> {/*show only onClick make everything inside it appear in a column*/}
         <SummonerInfo matchitem={matchitem}/>

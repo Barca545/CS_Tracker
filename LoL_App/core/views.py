@@ -64,9 +64,18 @@ def player_detail(request, match_id):
 @api_view(['GET'])
 def matchlist(request,summoner_name='Envoker',region='na1',number=1):
     matches_dto = Summoner(summoner_name=summoner_name,region=region).get_matches(number=number)
-    matches = {}
+    matches = {
+        'list': {} 
+    }
     for match_id in matches_dto:
-        matches[match_id] = Match(match_id,region).get_summoner_list()
+        match = Match(match_id,region)
+        matches[match_id] = {
+            'match_id': 'sgfgdgdf',
+            'duration': 'gfgdfsgfg',
+            'game_type': 'string|null',
+            'kda': 'string|null', 
+            'summoners_list': match.get_summoner_list()
+            }
     if request.method == 'GET':
         return JsonResponse(matches)
 
