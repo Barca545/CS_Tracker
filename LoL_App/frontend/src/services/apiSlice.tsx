@@ -21,5 +21,5 @@ export const apiSlice = createApi({
   }),
 })
 
-export const useGetMatchlistQuery = apiSlice.endpoints.getMatchlist.useQuery
+export const useGetMatchlistQuery = apiSlice.endpoints.getMatchlist.useQuery /// do I need this anymore?
 export const useGetMatchInfoQuery = apiSlice.endpoints.getMatchInfo.useQuery

@@ -7,8 +7,6 @@ export interface MatchlistRequest{
 export interface MatchlistRequestState {
   requestarray: MatchlistRequest
   requesturl: null | string,
-  ///I think what I need instead of a string is another type that denatures the API response 
-  ///then construct the response as an array of that type using Array<MatchInfo>
   matchlistids: Array<string>|null,
   matchlistresponse:null | string 
 }
@@ -64,3 +62,7 @@ export interface Match {
     summoners_list: Array<summoner>,
     responseStatus: string|null,
   }
+
+  export interface MatchList{
+    list:Array<MatchItem>
+  } ///For now my solution works but eventually make it so that when I pull the matches instead of pulling it match by match I call it this way
