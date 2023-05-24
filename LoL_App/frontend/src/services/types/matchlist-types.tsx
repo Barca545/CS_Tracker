@@ -60,6 +60,7 @@ export interface Match {
     duration: string|number|null,///Idk what data type it is so update when I figure out
     game_type: string|null,
     kda: string|null, ///Should be the KDA of the summoner making the request
+    cspm: number|null,
     summoners_list: Array<summoner>,
     responseStatus: string|null,
   }

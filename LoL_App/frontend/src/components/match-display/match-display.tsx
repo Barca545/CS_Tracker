@@ -9,59 +9,53 @@ import {MatchItem} from '../../services/types/matchlist-types'
 ///when a div is made, it sends a request to the API to get data for its data and 
 ///then sets a state to the result of making an api request for that specific ID's match data
 
-
-///here set the match info to the result of calling for the match info for the given game id
-const id='rtherhwea'///need to get the id from wherever it is stored.
-const matchinfo = useGetMatchInfoQuery(id).data ///info should be a JS object pulled from the JSON resposne to the API call
-const match:MatchItem = JSON.parse(matchinfo)
 ///need to add matchid, game duration,game type and whatever other info is on the matchitem type to the URL  
   
-
-  function GameItem(props:any){
-    return(
-      <div className='game-item'>
-        <div className='player-match-stats'>
-          <div>Match ID: {match.match_id}</div>
-          <div>Game Duration: {match.duration}</div>
-          <div>Game Type: {match.game_type}</div>
-          <div>KDA: {match.kda}</div>
-          <div>CSPM </div>
-        </div>
-        <SummonerInfo></SummonerInfo>
-      </div> 
-      
-  )
-  }
-function SummonerInfo(){
-  return(
-    match.summoners_list.map(summoner => (
-      <div className='match-players' key={summoner.name}>
-        <div>Items: {summoner.items}</div>
-        <div>Summoner Spells: {summoner.spells}</div> 
-        <div>KDA: {summoner.kda}</div>
-      </div>
-  ))
-)}
-  
 export default function DisplayMatches(){
-  /* Use a for loop to load a GameItem for the number of matches the user selects*/
-  const ids = useAppSelector(getMatchIds) 
-  ///should take an id from ids and generate a GameItem
-  ///feed this into the game list div below
-  
-  function GameItems(){
-    ids?.map((id)=>{
-      GameItem(id)
-    })
-  } 
-  
+  const ids = useAppSelector(getMatchIds)
+  if (Array.isArray(ids)){
+    return(
+      <div className='match-display'> 
+        <div className='summoner-info'>
+          {/*This can probably be static. Just show name icon and rank*/}
+        </div>
+        <div className='game-list'>
+          {ids.map(id => {
+            return <GameItem id={id}/>
+          })}
+        </div>
+      </div>) 
+  }
+}  
+
+function GameItem(props:any){
+  const id = props.id///need to get the id from wherever it is stored.
+  const rawmatchinfo = useGetMatchInfoQuery(id).data ///info should be a JS object pulled from the JSON resposne to the API call
+  const matchinfo:MatchItem = JSON.parse(rawmatchinfo)
+
+  function SummonerInfo(){
+    return(
+      matchinfo.summoners_list.map(summoner => (
+        <div className='match-players' key={summoner.name}>
+          <div>Items: {summoner.items}</div>
+          <div>Summoner Spells: {summoner.spells}</div> 
+          <div>KDA: {summoner.kda}</div>
+        </div>
+    ))
+  )}
+
   return(
-    <div className='match-display'> 
-      <div className='summoner-info'>
-        {/*This can probably be static. Just show name icon and rank*/}
+    <div className='game-item'>
+      <div className='header-stats'>
+        <div>Match ID: {matchinfo.match_id}</div>
+        <div>Game Duration: {matchinfo.duration}</div>
+        <div>Game Type: {matchinfo.game_type}</div>
+        <div>KDA: {matchinfo.kda/*grab the info of the summoner we are looking for idk how*/}</div>
+        <div>CSPM: {matchinfo.cspm/*grab the info of the summoner we are looking for idk how*/} </div>
       </div>
-      <div className='game-list'>
+      <div className='more-info'> {/*show only onClick make everything inside it appear in a column*/}
+        <SummonerInfo/>
       </div>
-    </div>
-  )
-}
+    </div> 
+    
+)}
