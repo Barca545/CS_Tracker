@@ -7,6 +7,7 @@ from .models import *
 from .cs_tracker.riot_api_calls import * 
 from django.http import JsonResponse
 
+
 # Create your views here.
 def front(request):
     context = { }
@@ -62,22 +63,23 @@ def player_detail(request, match_id):
         return Response(status=status.HTTP_204_NO_CONTENT)    
 
 @api_view(['GET'])
-def matchlist(request,summoner_name='Envoker',region='na1',number=1):
-    matches_dto = Summoner(summoner_name=summoner_name,region=region).get_matches(number=number)
-    matches = {
-        'list': {} 
+def matchlist(request,summoner_name,region='na1',number=1):
+    matches_dto = Summoner(summoner_name,region).get_matches(number)
+    matchlist = {
+        'list': [] 
     }
     for match_id in matches_dto:
-        match = Match(match_id,region)
-        matches[match_id] = {
-            'match_id': 'sgfgdgdf',
-            'duration': 'gfgdfsgfg',
-            'game_type': 'string|null',
-            'kda': 'string|null', 
-            'summoners_list': match.get_summoner_list()
-            }
+        match = Match(match_id,summoner_name,region)
+        matchlist['list'].append({
+            'match_id': match.match_id,
+            'duration': match.get_duration,
+            'game_type': match.get_type,
+            'kda': match.get_kda, 
+            'summoner spells': match.get_summoners,
+            'summoners_list': match.get_summoner_list
+            })
     if request.method == 'GET':
-        return JsonResponse(matches)
+        return JsonResponse(matchlist)
 
 @api_view(['GET'])
 def delta_cs(request,match_id,puuid,region='na1'):

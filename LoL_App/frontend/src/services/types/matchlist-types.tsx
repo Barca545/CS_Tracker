@@ -43,21 +43,22 @@ export interface Match {
 
   export interface summoner {
     name:string|null,
+    role: string|null,
     kills: number|null,
     deaths: number|null,
     assists: number|null,
     kda: number|null,
-    role: string|null
     champion: string|null,
     items: Array<number>|null,
-    spells:Array<string>|null,
+    spells:Array<number>|null,
   }
 
   export interface MatchItem {
     match_id: string|null,
-    duration: string|number|null,///Idk what data type it is so update when I figure out
+    duration: string|null,
     game_type: string|null,
-    kda: string|null, ///Should be the KDA of the summoner making the request
+    kda: string|null, 
+    summoner_spells: Array<number>,
     summoners_list: Array<summoner>,
     responseStatus: string|null,
   }

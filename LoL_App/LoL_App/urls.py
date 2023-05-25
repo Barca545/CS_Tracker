@@ -22,9 +22,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", front, name="front"),
     path("cs_data/", cs_data, name="cs_data"),
-    path("cs_data/<str:match_id>", cs_data_detail, name="detail"),
+    path("cs_data/<str:match_id>", cs_data_detail, name="cs_data_detail"), #used to say "detail, is that ok?"
     path("player/", player, name="player"),
-    path("player/<str:match_id>", player_detail, name="detail"),
+    path("player/<str:match_id>", player_detail, name="player_detail"),#used to say "detail, is that ok?"
     path("matchlist/<summoner_name>/<region>/<number>/", matchlist, name="matchlist"),
     path("delta_cs/<match_id>/<puuid>/<region>/", delta_cs, name="delta_cs"),
     path("problem_delta_cs/<match_id>/<puuid>/<region>/", problem_delta_cs, name="problem_delta_cs"),

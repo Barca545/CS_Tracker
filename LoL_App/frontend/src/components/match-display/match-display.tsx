@@ -12,8 +12,7 @@ import {MatchItem,MatchList} from '../../services/types/matchlist-types'
 export default function DisplayMatches(){
   const url = useAppSelector(getRequestUrl)
   const matchlist:MatchList = useGetMatchlistQuery(url).data
-  
-  if (url != null) {
+  if (url != null){
     return(
       <div className='match-display'> 
         <div className='summoner-info'>
