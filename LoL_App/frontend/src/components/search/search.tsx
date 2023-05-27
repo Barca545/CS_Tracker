@@ -1,15 +1,15 @@
 import {useState} from 'react';
 /// delete react select from the project///
 ///import {useGetMatchlistQuery } from '../../services/apiSlice';
-import {setUrl} from './matchlistRequestSlice'
-import {useAppDispatch} from '../../app/hooks';
+import {setUrl,getRequestUrl} from './matchlistRequestSlice'
+import {useAppDispatch,useAppSelector} from '../../app/hooks';
 
 export default function SearchMatch(){
   const dispatch = useAppDispatch();
   const [region,setRegion] = useState('na1')
   const [summonername,setSummonername] = useState('')
   const [number,setNumber] = useState(1)
-  const [url,setNewUrl] = useState('')
+  const [url,setNewUrl] = useState(useAppSelector(getRequestUrl))
   
   ///this is where I dispatch the action https://stackoverflow.com/a/70211326
   function handleSubmit(region:string,summonername:string,number:number){

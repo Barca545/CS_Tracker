@@ -5,65 +5,35 @@ export interface MatchlistRequest{
 }
 
 export interface MatchlistRequestState {
-  requestarray: MatchlistRequest
-  requesturl: null | string,
-  matchlistids: Array<string>|null,
+  requesturl: string,
   matchlistresponse:null | string 
 }
 
 ///https://redux-toolkit.js.org/rtk-query/usage-with-typescript
-export interface SummonerStats {
+
+export interface summoner {
   name:string,
+  role: string,
   kills: number,
   deaths: number,
   assists: number,
   kda: number,
-  role: string | null
-  champion: string
-  items: Array<number>
+  champion: string,
+  items: [number],
+  spells: Array<number>,
 }
 
-export interface SummonersList {
-  summoner1: SummonerStats,
-  summoner2: SummonerStats,
-  summoner3: SummonerStats,
-  summoner4: SummonerStats,
-  summoner5: SummonerStats,
-  summoner6: SummonerStats,
-  summoner7: SummonerStats,
-  summoner8: SummonerStats,
-  summoner9: SummonerStats,
-  summoner10: SummonerStats,
-}  
-
 export interface Match {
-  match_id: string|null,
-  summoners_list: SummonersList
+  id: string,
+  duration: string,
+  game_type: string,
+  kda: string, 
+  summoner_spells: Array<number>,
+  summoners_list: Array<summoner>,
+}
+
+export interface MatchListState{
+  ///also structure this to show the summoner name and info about the summoner 
+  matchlist:{[matchID:string]:Match},
+  responseStatus: string|null
 } 
-
-  export interface summoner {
-    name:string|null,
-    role: string|null,
-    kills: number|null,
-    deaths: number|null,
-    assists: number|null,
-    kda: number|null,
-    champion: string|null,
-    items: Array<number>|null,
-    spells:Array<number>|null,
-  }
-
-  export interface MatchItem {
-    match_id: string|null,
-    duration: string|null,
-    game_type: string|null,
-    kda: string|null, 
-    summoner_spells: Array<number>,
-    summoners_list: Array<summoner>,
-    responseStatus: string|null,
-  }
-
-  export interface MatchList{
-    list:Array<MatchItem>,
-    responseStatus: string|null
-  } ///For now my solution works but eventually make it so that when I pull the matches instead of pulling it match by match I call it this way

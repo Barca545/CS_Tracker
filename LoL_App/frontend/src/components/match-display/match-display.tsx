@@ -1,53 +1,64 @@
-import React, {useState} from 'react'; ///do I need to do this?
-import { useAppSelector} from '../../app/hooks'; 
-import {useGetMatchInfoQuery,useGetMatchlistQuery} from '../../services/apiSlice';
-import {getMatchIds,getRequestUrl} from '../../components/search/matchlistRequestSlice'
-import {MatchItem,MatchList} from '../../services/types/matchlist-types'
+import React, {useState,useEffect} from 'react'; ///do I need to do this?
+import {useAppSelector,useAppDispatch} from '../../app/hooks'; 
+import {Match,MatchListState} from '../../services/types/matchlist-types'
+import { recievedMatchList } from '../search/matchlistSlice';
+import {useGetMatchlistQuery} from '../../services/apiSlice'
+import {get} from '../../services/api'
 
 ///so each div has a match ID as its value [key?]
 ///when a div is made, it sends a request to the API to get data for its data and 
 ///then sets a state to the result of making an api request for that specific ID's match data
 
 ///need to add matchid, game duration,game type and whatever other info is on the matchitem type to the URL  
+
+///display matches border needs to expand with the length of the contents
 export default function DisplayMatches(){
-  const url = useAppSelector(getRequestUrl)
-  const matchlist:MatchList = useGetMatchlistQuery(url).data
-  if (url != null){
-    return(
-      <div className='match-display'> 
-        <div className='summoner-info'>
-          {/*This can probably be static. Just show name icon and rank*/}
-        </div>
-        <div className='game-list'>
-          {matchlist.list.map(matchitem => {
-            return <GameItem matchitem={matchitem}/>
-          })}
-        </div>
-      </div>) 
-  }
-else return (<></>)
+  const dispatch = useAppDispatch();
+  const url = useAppSelector(state => state.matchlistrequest.requesturl)
+  useEffect(() => {
+    ///this needs to call the target URL not a static URL
+    ///this needs to run every time a new search is executed
+    get(url).then((matchlist) => {
+      console.log(matchlist)///for debugging
+      dispatch(recievedMatchList(matchlist));
+    });
+  }, []);
+  const matchlist = useAppSelector(state => state.matchlist.matchlist)
+  return(
+    <div className='match-display'> 
+      <div className='summoner-info'>
+        {/*This can probably be static. Just show name icon and rank*/}
+      </div>
+      <div className='game-list'>
+        {Object.values(matchlist).map(match => {
+          return <GameItem match={match}/>
+        })}
+      </div>
+    </div>) 
+  
+
 }  
 
 function GameItem(props:any){
-  const matchitem:MatchItem = props.matchitem
+  const match:Match = props.match
   return(
     <div className='game-item'>
       <div className='header-stats'>
-        <div>Match ID: {matchitem.match_id}</div>
-        <div>Game Duration: {matchitem.duration}</div>
-        <div>Game Type: {matchitem.game_type}</div>
-        <div>KDA: {matchitem.kda/*grab the info of the summoner we are looking for idk how*/}</div>
+        <div>Match ID: {match.id}</div>
+        <div>Game Duration: {match.duration}</div>
+        <div>Game Type: {match.game_type}</div>
+        <div>KDA: {match.kda/*grab the info of the summoner we are looking for idk how*/}</div>
       </div>
       <div className='more-info'> {/*show only onClick make everything inside it appear in a column*/}
-        <SummonerInfo matchitem={matchitem}/>
+        <SummonerInfo match={match}/>
       </div>
     </div>   
 )}
 
 function SummonerInfo(props:any){
-  const matchitem:MatchItem = props.matchitem
+  const match:Match= props.match
   return(
-    <>{matchitem.summoners_list.map(summoner => (
+    <>{match.summoners_list.map(summoner => (
       <div className='match-players' key={summoner.name}>
         <div>Items: {summoner.items}</div>
         <div>Summoner Spells: {summoner.spells}</div> 

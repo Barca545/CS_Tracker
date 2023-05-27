@@ -37,13 +37,26 @@ class Summoner:
     def __init__(self,region:str,summoner_name:str):
         self.summoner_name = summoner_name
         self.region = region
-        self.id = summoner_dto['id']
-        self.accountId = summoner_dto['accountId']
-        self.puuid = summoner_dto['puuid']
-        self.profileIconId = summoner_dto['profileIconId']
-        self.revisionDate = summoner_dto['revisionDate']
-        self.summonerLevel = summoner_dto['summonerLevel']
-        summoner_dto = lol_watcher.summoner.by_name(f'{region}', f'{summoner_name}')
+        self.summoner_dto = lol_watcher.summoner.by_name(f'{region}', f'{summoner_name}')
+        self.puuid = self.summoner_dto['puuid']
+        
+    def get_id(self):
+        return self.summoner_dto['id']
+    
+    def get_accountID(self):
+        return self.summoner_dto['accountId']
+    
+    def get_puuid(self):
+        return self.summoner_dto['puuid']
+    
+    def get_profileIconID(self):
+        return self.summoner_dto['profileIconId']
+    
+    def get_revision_date(self):
+        return self.summoner_dto['revisionDate']
+    
+    def get_level(self):
+        return self.summoner_dto['summonerLevel']
 
     def get_matches(self,number=10):
         self.puuid
@@ -53,34 +66,35 @@ class Match:
     def __init__(self,match_id:str,summoner_name:str,region:str):
         self.match_id = match_id
         self.match_dto = lol_watcher.match.by_id(region,match_id) #This should be the match_dto not the match TL dto
-        self.target_summoner = Summoner(summoner_name,region)
+        self.target_summoner = Summoner(region,summoner_name)
+        self.region = region
     
     def get_summoner_list(self):
         summoners = self.match_dto['info']['participants']
         # Currently glitches if for some reason a match has null participants. ARAMS will probably need to be handled separartely as well. Possibly do the following: if summoners is None or []: 
         summonerlist = []
-        for i in range(2):
-            summoner = summoners[i]
+        for new_summoner in summoners:
             summonerlist.append({
-                'name':summoner['summonerName'],
-                'role':summoner['role'],
-                'kills':summoner['kills'],
-                'deaths':summoner['deaths'],
-                'assists':summoner['assists'],
-                'kda':summoner['challenges']['kda'],
-                'champion':summoner['championName'],
-                'items':[summoner['item0'],summoner['item1'],summoner['item2'],summoner['item3'],summoner['item4'],summoner['item5'],summoner['item6']],
-                'spells':[summoner['summoner1Id'],summoner['summoner2Id']],
+                'name':new_summoner['summonerName'],
+                'role':new_summoner['role'],
+                'kills':new_summoner['kills'],
+                'deaths':new_summoner['deaths'],
+                'assists':new_summoner['assists'],
+                'kda':round(new_summoner['challenges']['kda'],2),
+                'champion':new_summoner['championName'],
+                'items':[new_summoner['item0'],new_summoner['item1'],new_summoner['item2'],new_summoner['item3'],new_summoner['item4'],new_summoner['item5'],new_summoner['item6']],
+                'spells':[new_summoner['summoner1Id'],new_summoner['summoner2Id']],
                 })
-            return summonerlist
+        return summonerlist
     
     def get_kda(self):
         target_puuid = self.target_summoner.puuid
         participant_index = self.match_dto['metadata']['participants'].index(target_puuid)
         participant = self.match_dto['info']['participants'][participant_index]
-        kda = participant['challenges']['kda']
+        kda = round(participant['challenges']['kda'],2)
         return kda
-    def get_summoners(self):
+    
+    def get_summoner_spells(self):
         target_puuid = self.target_summoner.puuid
         participant_index = self.match_dto['metadata']['participants'].index(target_puuid)
         participant = self.match_dto['info']['participants'][participant_index]
@@ -132,3 +146,10 @@ def total_problem_delta_CS(match,puuid:str,target=4):
     cs[0] = {f'CS @ {0}':0,'Delta CS':0} #kinda ugly but whatever
     cs_graph = {match_id:cs}
     return(cs_graph)
+
+#test = Match('NA1_4665213017','envoker','na1').get_summoner_spells()
+#test = Match('NA1_4665213017','envoker','na1').get_summoner_list()
+#test = Match('NA1_4665213017','envoker','na1').get_kda()
+#test = Match('NA1_4665213017','envoker','na1').get_type()
+#test = Match('NA1_4665213017','envoker','na1').get_duration()
+#print(test)
