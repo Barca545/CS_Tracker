@@ -1,0 +1,27 @@
+.match-display  {
+/*
+-Don't want a border do want the box to take up the full width of the middle column
+-https://stackoverflow.com/questions/27822463/make-html5-details-tag-to-take-maximum-available-height
+-Remove the "results" section since I am going to incorporate that into the matchlist so it expands when they click on it
+-rename the summary/details thing etc
+*/
+border-style: solid; 
+border-width: 5px;
+position: absolute;
+}
+
+.summary {
+    font-weight: bold;
+    margin: -0.5em -0.5em 0;
+    padding: 0.5em;
+    text-align: left;
+}
+
+.game-item[open] {
+    padding: 0.5em;
+}
+
+.game-item[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 0.5em;
+}

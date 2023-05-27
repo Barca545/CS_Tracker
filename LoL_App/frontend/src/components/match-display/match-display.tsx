@@ -2,8 +2,9 @@ import React, {useState,useEffect} from 'react'; ///do I need to do this?
 import {useAppSelector,useAppDispatch} from '../../app/hooks'; 
 import {Match,MatchListState} from '../../services/types/matchlist-types'
 import { recievedMatchList } from '../search/matchlistSlice';
-import {useGetMatchlistQuery} from '../../services/apiSlice'
-import {get} from '../../services/api'
+import {useGetMatchlistQuery} from '../../services/apiSlice';
+import {get} from '../../services/api';
+import './match-display.css';
 
 ///so each div has a match ID as its value [key?]
 ///when a div is made, it sends a request to the API to get data for its data and 
@@ -35,24 +36,20 @@ export default function DisplayMatches(){
         })}
       </div>
     </div>) 
-  
-
 }  
 
 function GameItem(props:any){
   const match:Match = props.match
   return(
-    <div className='game-item'>
-      <div className='header-stats'>
+    <details className='game-item'>
+      <summary className='header-stats'>
         <div>Match ID: {match.id}</div>
         <div>Game Duration: {match.duration}</div>
         <div>Game Type: {match.game_type}</div>
         <div>KDA: {match.kda/*grab the info of the summoner we are looking for idk how*/}</div>
-      </div>
-      <div className='more-info'> {/*show only onClick make everything inside it appear in a column*/}
-        <SummonerInfo match={match}/>
-      </div>
-    </div>   
+      </summary>
+      <SummonerInfo match={match}/>
+    </details>   
 )}
 
 function SummonerInfo(props:any){

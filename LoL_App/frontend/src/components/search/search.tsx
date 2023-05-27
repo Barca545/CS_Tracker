@@ -13,6 +13,8 @@ export default function SearchMatch(){
   
   ///this is where I dispatch the action https://stackoverflow.com/a/70211326
   function handleSubmit(region:string,summonername:string,number:number){
+    ///url does not seem to be updating
+    debugger
     setNewUrl(`${region}/${summonername}/${number}/`);
     dispatch(setUrl(url));
     console.log(url)
