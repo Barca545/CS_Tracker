@@ -1,7 +1,7 @@
 import React, {useState,useEffect} from 'react'; ///do I need to do this?
 import {useAppSelector,useAppDispatch} from '../../app/hooks'; 
 import {Match,MatchListState} from '../../services/types/matchlist-types'
-import { recievedMatchList } from '../search/matchlistSlice';
+import {recievedMatchList } from '../search/matchlistSlice';
 import {useGetMatchlistQuery} from '../../services/apiSlice';
 import {get} from '../../services/api';
 import './match-display.css';
@@ -14,16 +14,6 @@ import './match-display.css';
 
 ///display matches border needs to expand with the length of the contents
 export default function DisplayMatches(){
-  const dispatch = useAppDispatch();
-  const url = useAppSelector(state => state.matchlistrequest.requesturl)
-  useEffect(() => {
-    ///this needs to call the target URL not a static URL
-    ///this needs to run every time a new search is executed
-    get(url).then((matchlist) => {
-      console.log(matchlist)///for debugging
-      dispatch(recievedMatchList(matchlist));
-    });
-  }, []);
   const matchlist = useAppSelector(state => state.matchlist.matchlist)
   return(
     <div className='match-display'> 
@@ -41,25 +31,33 @@ export default function DisplayMatches(){
 function GameItem(props:any){
   const match:Match = props.match
   return(
-    <details className='game-item'>
-      <summary className='header-stats'>
-        <div>Match ID: {match.id}</div>
-        <div>Game Duration: {match.duration}</div>
-        <div>Game Type: {match.game_type}</div>
-        <div>KDA: {match.kda/*grab the info of the summoner we are looking for idk how*/}</div>
-      </summary>
-      <SummonerInfo match={match}/>
-    </details>   
+    <div>
+      <details className='game-item'>
+        <summary className='header-stats'>
+          <div>Match ID: {match.id}</div>
+          <div>Game Duration: {match.duration}</div>
+          <div>Game Type: {match.game_type}</div>
+          <div>KDA: {match.kda/*grab the info of the summoner we are looking for idk how*/}</div>
+        </summary>
+        <PlayersInfo match={match}/>
+      </details> 
+    </div>  
 )}
 
-function SummonerInfo(props:any){
+function PlayersInfo(props:any){
   const match:Match= props.match
   return(
-    <>{match.summoners_list.map(summoner => (
-      <div className='match-players' key={summoner.name}>
-        <div>Items: {summoner.items}</div>
-        <div>Summoner Spells: {summoner.spells}</div> 
-        <div>KDA: {summoner.kda}</div>
+    <div>{match.summoners_list.map(summoner => (
+      <div className='player-info' key={summoner.name}>
+        <span className='player-info-component'>Name: {summoner.name}</span>
+        <span className='player-info-component'>KDA: {summoner.kda}</span>
+        <span className='player-info-component'>Items: {summoner.items}</span>
+        <span className='player-info-component'>Summoner Spells: {summoner.spells}</span> 
       </div>
-  ))}</>
+  ))}
+    <div className='more-details'>
+      <button value='Show Details'> Show Details</button> 
+      {/*need to link this to the show the CS number thing*/}
+    </div>
+  </div>
 )}

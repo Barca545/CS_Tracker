@@ -3,21 +3,23 @@ import {useState} from 'react';
 ///import {useGetMatchlistQuery } from '../../services/apiSlice';
 import {setUrl,getRequestUrl} from './matchlistRequestSlice'
 import {useAppDispatch,useAppSelector} from '../../app/hooks';
+import { recievedMatchList } from './matchlistSlice';
+import {get} from '../../services/api';
 
 export default function SearchMatch(){
   const dispatch = useAppDispatch();
   const [region,setRegion] = useState('na1')
   const [summonername,setSummonername] = useState('')
   const [number,setNumber] = useState(1)
-  const [url,setNewUrl] = useState(useAppSelector(getRequestUrl))
-  
+
+  //delete the request slice
+
   ///this is where I dispatch the action https://stackoverflow.com/a/70211326
   function handleSubmit(region:string,summonername:string,number:number){
-    ///url does not seem to be updating
-    debugger
-    setNewUrl(`${region}/${summonername}/${number}/`);
-    dispatch(setUrl(url));
-    console.log(url)
+    get(`http://127.0.0.1:8000/matchlist/${summonername}/${region}/${number}/`).then((matchlist) => {
+      console.log(matchlist)///for debugging
+      dispatch(recievedMatchList(matchlist));
+    });
   }
 
   return(
@@ -58,7 +60,7 @@ export default function SearchMatch(){
             </select>
           </span>
           <span className='search-form-item'> 
-            <input type='submit' onSubmit={() =>{handleSubmit(region,summonername,number)}}/>  
+            <input type='button' value='Search' onClick={() =>{handleSubmit(region,summonername,number)}}/>  
           </span>
         </form>
       </div>

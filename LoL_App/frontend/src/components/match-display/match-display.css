@@ -10,18 +10,32 @@ border-width: 5px;
 position: absolute;
 }
 
-.summary {
+.game-item > .header-stats {
     font-weight: bold;
     margin: -0.5em -0.5em 0;
     padding: 0.5em;
     text-align: left;
+    cursor: pointer;
+}
+
+.game-item{
+    width: 200px;
 }
 
 .game-item[open] {
+    margin-bottom: 0.5em;
     padding: 0.5em;
 }
 
-.game-item[open] summary {
-    border-bottom: 1px solid #aaa;
-    margin-bottom: 0.5em;
+.player-info{
+    display: flex;
+    min-width: 0;
+}
+
+.player-info-component{
+    width: 50px;
+    height: 30px;
+    margin: 2px;
+    border: 1px solid blue; 
+    font-size: small; 
 }
