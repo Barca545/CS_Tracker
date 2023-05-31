@@ -38,7 +38,6 @@ class Summoner:
         self.summoner_name = summoner_name
         self.region = region
         self.summoner_dto = lol_watcher.summoner.by_name(f'{region}', f'{summoner_name}')
-        self.puuid = self.summoner_dto['puuid']
         
     def get_id(self):
         return self.summoner_dto['id']

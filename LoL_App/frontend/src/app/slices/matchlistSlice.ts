@@ -1,5 +1,8 @@
-import { createSlice,PayloadAction} from '@reduxjs/toolkit'
-import {MatchListState,Match} from '../../services/types/matchlist-types'
+import { createSlice,PayloadAction} from '@reduxjs/toolkit';
+import {MatchListState,Match} from '../../services/types/matchlist-types';
+import { useNavigate } from 'react-router-dom';
+
+///move to a more universal folder
 
 ///port the functionality for grabing a match from match-display to here. Not urgent.
 ///dispatch setMatchList in search set it equal to const matchlist:MatchList = JSON.parse(useGetMatchlistQuery(url).data)

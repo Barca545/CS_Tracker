@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import {apiSlice} from '../services/apiSlice';
-import  matchlistRequestReducer from "../components/search/matchlistRequestSlice";
-import { combineReducers } from '@reduxjs/toolkit'
-import matchlistReducer from "../components/search/matchlistSlice";
+import matchlistRequestReducer from "./slices/matchlistRequestSlice";
+import {combineReducers } from '@reduxjs/toolkit'
+import matchlistReducer from "./slices/matchlistSlice";
+import matchInfoReducer from "./slices/matchinfoSlice";
 
 ///try installing a logger for easier debugging: https://github.com/LogRocket/redux-logger
 
@@ -11,6 +12,7 @@ export const store =  configureStore({
     [apiSlice.reducerPath]: apiSlice.reducer,
     matchlistrequest: matchlistRequestReducer,
     matchlist:matchlistReducer,
+    matchinfo:matchInfoReducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware),
 })

@@ -64,7 +64,8 @@ def player_detail(request, match_id):
 
 @api_view(['GET'])
 def matchlist(request,summoner_name,region='na1',number=1):
-    matches_dto = Summoner(region,summoner_name).get_matches(number)
+    summoner = Summoner(region,summoner_name)
+    matches_dto = summoner.get_matches(number)
     matchlist = {}
     for match_id in matches_dto:
         match = Match(match_id,summoner_name,region)
@@ -73,6 +74,8 @@ def matchlist(request,summoner_name,region='na1',number=1):
             'duration': match.get_duration(),
             'game_type': match.get_type(),
             'kda': match.get_kda(), 
+            'region':region,
+            'puuid': summoner.get_puuid(),
             'summoner spells': match.get_summoner_spells(),
             'summoners_list': match.get_summoner_list(),
             }
@@ -98,3 +101,6 @@ def cs_15(request,match_id,puuid,region):
     match = get_match_tl(match_id,region)
     if request.method == 'GET':
         return JsonResponse(get_cs(match=match,minute=15,puuid=puuid))
+    
+#merge delta_cs, problem_delta_cs and cs_15 into one function 
+#update the matchlist to return puuid and region

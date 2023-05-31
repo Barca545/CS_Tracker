@@ -1,10 +1,10 @@
 import React, {useState,useEffect} from 'react'; ///do I need to do this?
 import {useAppSelector,useAppDispatch} from '../../app/hooks'; 
-import {Match,MatchListState} from '../../services/types/matchlist-types'
-import {recievedMatchList } from '../search/matchlistSlice';
-import {useGetMatchlistQuery} from '../../services/apiSlice';
-import {get} from '../../services/api';
+import {Match} from '../../services/types/matchlist-types'
 import './match-display.css';
+import { useNavigate } from 'react-router-dom'; 
+import {get} from '../../services/api'
+import {recievedInfo} from '../../app/slices/matchinfoSlice'
 
 ///so each div has a match ID as its value [key?]
 ///when a div is made, it sends a request to the API to get data for its data and 
@@ -45,7 +45,23 @@ function GameItem(props:any){
 )}
 
 function PlayersInfo(props:any){
-  const match:Match= props.match
+  const match:Match= props.match;
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  function MoreDetails(props:any) {
+    ///Consider including this in the GameItem section instead
+    get(`http://127.0.0.1:8000/delta_cs/${match.id}/${match.puuid}/${match.region}/`).then((csdetails) =>{
+      console.log(csdetails)///debugging
+      dispatch(recievedInfo(csdetails));
+    })
+    return (
+        <button onClick={() => navigate('/match-info')}>
+          More Details
+        </button>
+    );
+  }
+  
   return(
     <div>{match.summoners_list.map(summoner => (
       <div className='player-info' key={summoner.name}>
@@ -56,7 +72,7 @@ function PlayersInfo(props:any){
       </div>
   ))}
     <div className='more-details'>
-      <button value='Show Details'> Show Details</button> 
+      <MoreDetails/>
       {/*need to link this to the show the CS number thing*/}
     </div>
   </div>

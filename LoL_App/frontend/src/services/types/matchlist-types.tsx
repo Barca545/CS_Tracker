@@ -28,6 +28,8 @@ export interface Match {
   duration: string,
   game_type: string,
   kda: string, 
+  region:string, ///need for the cs detail code the backed to return
+  puuid:string, ///need for the cs detail code the backed to return
   summoner_spells: Array<number>,
   summoners_list: Array<summoner>,
 }

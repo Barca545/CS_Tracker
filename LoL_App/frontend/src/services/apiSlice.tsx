@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import {MatchlistRequestState} from './types/matchlist-types'///why did I need this?
-import {} from '../components/search/matchlistRequestSlice' 
+import {} from '../app/slices/matchlistRequestSlice' 
+
+///delete in final build
 
 ///https://redux-toolkit.js.org/rtk-query/usage/customizing-queries#:~:text=RTK%20Query%20expects%20a%20baseQuery,to%20return%20such%20an%20object.
 export const apiSlice = createApi({

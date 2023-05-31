@@ -1,10 +1,10 @@
 import {useState} from 'react';
 /// delete react select from the project///
 ///import {useGetMatchlistQuery } from '../../services/apiSlice';
-import {setUrl,getRequestUrl} from './matchlistRequestSlice'
-import {useAppDispatch,useAppSelector} from '../../app/hooks';
-import { recievedMatchList } from './matchlistSlice';
-import {get} from '../../services/api';
+import {setUrl,getRequestUrl} from '../app/slices/matchlistRequestSlice'
+import {useAppDispatch,useAppSelector} from '../app/hooks';
+import { recievedMatchList } from '../app/slices/matchlistSlice';
+import {get} from '../services/api';
 
 export default function SearchMatch(){
   const dispatch = useAppDispatch();

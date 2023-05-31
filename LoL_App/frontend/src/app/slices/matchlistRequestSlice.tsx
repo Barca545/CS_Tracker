@@ -1,7 +1,9 @@
 import { createSlice,PayloadAction} from '@reduxjs/toolkit'
 import {MatchlistRequestState} from '../../services/types/matchlist-types'
-import { RootState } from '../../app/store'
+import { RootState } from '../store'
 import {useGetMatchlistQuery} from '../../services/apiSlice'
+
+///delete in final build. I think this is entirely unused.
 
 const initialState: MatchlistRequestState = {
   ///the default url should just lead to a blank page that says like "search for a summoner"
