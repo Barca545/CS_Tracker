@@ -30,13 +30,14 @@ export default function DisplayMatches(){
 
 function GameItem(props:any){
   const match:Match = props.match
+  ///for some reason match type is not showing up
   return(
     <div>
       <details className='game-item'>
         <summary className='header-stats'>
           <div>Match ID: {match.id}</div>
           <div>Game Duration: {match.duration}</div>
-          <div>Game Type: {match.game_type}</div>
+          <div>Game Type: {match.type}</div>
           <div>KDA: {match.kda/*grab the info of the summoner we are looking for idk how*/}</div>
         </summary>
         <PlayersInfo match={match}/>
@@ -51,7 +52,7 @@ function PlayersInfo(props:any){
 
   function MoreDetails(props:any) {
     ///Consider including this in the GameItem section instead
-    get(`http://127.0.0.1:8000/delta_cs/${match.id}/${match.puuid}/${match.region}/`).then((csdetails) =>{
+    get(`http://127.0.0.1:8000/cs_details/${match.id}/${match.puuid}/${match.region}/${match.type}/`).then((csdetails) =>{
       console.log(csdetails)///debugging
       dispatch(recievedInfo(csdetails));
     })
@@ -61,7 +62,7 @@ function PlayersInfo(props:any){
         </button>
     );
   }
-  
+
   return(
     <div>{match.summoners_list.map(summoner => (
       <div className='player-info' key={summoner.name}>

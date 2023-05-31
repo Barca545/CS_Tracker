@@ -7,12 +7,13 @@ export interface timestamp {
 
 export interface csResults{
     id: String,
-    gametype:string,
-    outcome:string,
-    champion:string,
+    type:string,
+    ///outcome:string,
+    ///champion:string,
     cspm:number,
-    problem: Array<timestamp>,
+    cs15:number,
     all:Array<timestamp>,
+    problem: Array<timestamp>,
 }
 
 export interface csResultsState{

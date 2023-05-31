@@ -26,7 +26,7 @@ export interface summoner {
 export interface Match {
   id: string,
   duration: string,
-  game_type: string,
+  type: string,
   kda: string, 
   region:string, ///need for the cs detail code the backed to return
   puuid:string, ///need for the cs detail code the backed to return

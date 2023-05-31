@@ -82,25 +82,24 @@ def matchlist(request,summoner_name,region='na1',number=1):
     if request.method == 'GET':
         return JsonResponse(matchlist)
 
-@api_view(['GET'])
-def delta_cs(request,match_id,puuid,region='na1'):
-    match = get_match_tl(match_id,region) #could find a way to move this outside the function using state hooks and stuff
-    delta_cs = total_delta_CS(match,puuid) 
-    if request.method == 'GET':
-        return JsonResponse(delta_cs)
-
 @api_view(['GET']) #needs url
-def problem_delta_cs(request,match_id,puuid,region='na1'):
+def problem_delta_cs(request,match_id,puuid,type,region='na1'):
+    #matchlist needs to return outcome (maybe not, might be a pain), and champion
     match = get_match_tl(match_id,region) #could find a way to move this outside the function using state hooks and stuff
+    #needs a condition to not run this if the match is shorter than 15min
+    #probably like if duration < 15 return null
+    cs_15 = get_cs(match=match,minute=15,puuid=puuid)
+    delta_cs = total_delta_CS(match,puuid) 
     problem_cs = total_problem_delta_CS(match,puuid) 
+    cs_results = {
+        'id':match_id,
+        #'outcome':
+        #'champion':
+        'type':type,
+        'cs15':cs_15,
+        'delta cs': delta_cs,
+        'problem cs':problem_cs,
+    }
     if request.method == 'GET':
-        return JsonResponse(problem_cs)
+        return JsonResponse(cs_results)
 
-@api_view(['GET']) 
-def cs_15(request,match_id,puuid,region):
-    match = get_match_tl(match_id,region)
-    if request.method == 'GET':
-        return JsonResponse(get_cs(match=match,minute=15,puuid=puuid))
-    
-#merge delta_cs, problem_delta_cs and cs_15 into one function 
-#update the matchlist to return puuid and region

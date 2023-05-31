@@ -38,6 +38,7 @@ class Summoner:
         self.summoner_name = summoner_name
         self.region = region
         self.summoner_dto = lol_watcher.summoner.by_name(f'{region}', f'{summoner_name}')
+        self.puuid = self.summoner_dto['puuid']
         
     def get_id(self):
         return self.summoner_dto['id']
@@ -58,8 +59,8 @@ class Summoner:
         return self.summoner_dto['summonerLevel']
 
     def get_matches(self,number=10):
-        self.puuid
-        return lol_watcher.match.matchlist_by_puuid(puuid=self.puuid,region=self.region,count=number)
+        puuid = self.puuid
+        return lol_watcher.match.matchlist_by_puuid(puuid=puuid,region=self.region,count=number)
 
 class Match:
     def __init__(self,match_id:str,summoner_name:str,region:str):
@@ -109,6 +110,8 @@ class Match:
 def get_match_tl(match_id:str, region:str):
     return lol_watcher.match.timeline_by_match(region=region,match_id=match_id)
 
+#All of the below could possibly become methods of the Match object
+
 def get_cs(match,minute:int,puuid:str):
     player = match['metadata']['participants'].index(puuid)
     cs_at = match['info']['frames'][minute]['participantFrames'][f'{player}']['minionsKilled']
@@ -129,7 +132,8 @@ def total_delta_CS(match,puuid:str):
         cs_at = get_cs(match=match,minute=frame,puuid=puuid)
         delta_cs = cs_at-get_cs(match=match,minute=frame-1,puuid=puuid)
         cs[frame] = {f'CS @ {frame}':cs_at, 'Delta CS':delta_cs}
-    cs[0] = {f'CS @ {0}':0,'Delta CS':0} #kinda ugly but whatever
+    #Possibly use datetime lib to get this in a better format
+    cs[0] = {f'CS @ {0}':0,'Delta CS':0} 
     cs_graph = {match_id:cs}
     return(cs_graph)
 
@@ -142,7 +146,8 @@ def total_problem_delta_CS(match,puuid:str,target=4):
         delta_cs = cs_at-get_cs(match=match,minute=frame-1,puuid=puuid)
         if frame > 2 and delta_cs < target:
             cs[frame] = {f'CS @ {frame}':cs_at, 'Delta CS':delta_cs}
-    cs[0] = {f'CS @ {0}':0,'Delta CS':0} #kinda ugly but whatever
+    #Possibly use datetime lib to get this in a better format
+    cs[0] = {f'CS @ {0}':0,'Delta CS':0} 
     cs_graph = {match_id:cs}
     return(cs_graph)
 
@@ -151,4 +156,13 @@ def total_problem_delta_CS(match,puuid:str,target=4):
 #test = Match('NA1_4665213017','envoker','na1').get_kda()
 #test = Match('NA1_4665213017','envoker','na1').get_type()
 #test = Match('NA1_4665213017','envoker','na1').get_duration()
-#print(test)
+#
+
+match = Match('NA1_4665213017','envoker','na1')
+
+
+test = get_cs(match,15)
+
+print(test)
+
+#need to debug the get_cs function

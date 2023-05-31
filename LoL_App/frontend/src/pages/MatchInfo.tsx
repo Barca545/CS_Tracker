@@ -8,9 +8,9 @@ const MatchInfo = () => {
     return(
     <>
       <h1>Match Info</h1>
-      <div className='match-id'>Match ID: </div>
+      <div className='match-id'>Match ID: {matchinfo?.id} </div>
       <div className='cs-15'> CS@15: </div>
-      <div className='problem-cs'>Problem Minutes:</div>
+      <div className='problem-cs'>Problem Minutes: </div>
       <details>
         <summary>show CS at each minute</summary>
       </details>
