@@ -7,6 +7,7 @@ const initialState:csResultsState ={
   matchinfo:{ 
     id: 'placeholder',
     type:'placeholder',
+    duration:'placeholder',
     cspm:2,
     cs15:2,
     allcs:{},

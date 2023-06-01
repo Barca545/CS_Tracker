@@ -89,7 +89,7 @@ def problem_delta_cs(request,match_id,puuid,type,region='na1'):
     #duration is returning too short even if the game is longer than 15min 
     duration = len(match_tl['info']['frames'])
     cspm = round(get_cs(match_tl=match_tl,minute=14,puuid=puuid)/(duration-1),1)
-    if duration < 15:
+    if duration > 15:
         cs_15 = get_cs(match=match_tl,minute=15,puuid=puuid)
     else:
         cs_15 = 'Too Short'
@@ -99,6 +99,7 @@ def problem_delta_cs(request,match_id,puuid,type,region='na1'):
         'id':match_id,
         #'outcome':
         #'champion':
+        'duration':duration,
         'cspm': cspm,
         'type':type,
         'cs15':cs_15,

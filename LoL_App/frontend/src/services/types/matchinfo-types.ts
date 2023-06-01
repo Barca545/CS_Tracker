@@ -3,6 +3,7 @@ export interface csResults{
     type:string,
     ///outcome:string,
     ///champion:string,
+    duration:string,
     cspm:number,
     cs15:number,
     allcs:{ [key: string]: number },
