@@ -72,7 +72,7 @@ def matchlist(request,summoner_name,region='na1',number=1):
         matchlist[match.match_id] = {
             'id':match.match_id,
             'duration': match.get_duration(),
-            'game_type': match.get_type(),
+            'type': match.get_type(),
             'kda': match.get_kda(), 
             'region':region,
             'puuid': summoner.get_puuid(),
@@ -85,20 +85,25 @@ def matchlist(request,summoner_name,region='na1',number=1):
 @api_view(['GET']) #needs url
 def problem_delta_cs(request,match_id,puuid,type,region='na1'):
     #matchlist needs to return outcome (maybe not, might be a pain), and champion
-    match = get_match_tl(match_id,region) #could find a way to move this outside the function using state hooks and stuff
-    #needs a condition to not run this if the match is shorter than 15min
-    #probably like if duration < 15 return null
-    cs_15 = get_cs(match=match,minute=15,puuid=puuid)
-    delta_cs = total_delta_CS(match,puuid) 
-    problem_cs = total_problem_delta_CS(match,puuid) 
+    match_tl = get_match_tl(match_id=match_id,region=region) #could find a way to move this outside the function using state hooks and stuff
+    #duration is returning too short even if the game is longer than 15min 
+    duration = len(match_tl['info']['frames'])
+    cspm = round(get_cs(match_tl=match_tl,minute=14,puuid=puuid)/(duration-1),1)
+    if duration < 15:
+        cs_15 = get_cs(match=match_tl,minute=15,puuid=puuid)
+    else:
+        cs_15 = 'Too Short'
+    delta_cs = total_delta_CS(match_tl,puuid) 
+    problem_cs = total_problem_delta_CS(match_tl,puuid) 
     cs_results = {
         'id':match_id,
         #'outcome':
         #'champion':
+        'cspm': cspm,
         'type':type,
         'cs15':cs_15,
-        'delta cs': delta_cs,
-        'problem cs':problem_cs,
+        'allcs': delta_cs,
+        'problem':problem_cs,
     }
     if request.method == 'GET':
         return JsonResponse(cs_results)

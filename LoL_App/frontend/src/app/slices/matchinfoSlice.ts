@@ -4,7 +4,13 @@ import { RootState } from '../store'
 import {  csResultsState,csResults  } from '../../services/types/matchinfo-types'
 
 const initialState:csResultsState ={
-  matchinfo:null,
+  matchinfo:{ 
+    id: 'placeholder',
+    type:'placeholder',
+    cspm:2,
+    cs15:2,
+    allcs:{},
+    problem:{}},
   responseStatus:null
 }
 

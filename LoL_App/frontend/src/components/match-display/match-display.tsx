@@ -6,9 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import {get} from '../../services/api'
 import {recievedInfo} from '../../app/slices/matchinfoSlice'
 
-///so each div has a match ID as its value [key?]
-///when a div is made, it sends a request to the API to get data for its data and 
-///then sets a state to the result of making an api request for that specific ID's match data
+///eventually code this so it does not give the option to view CS for ARAMs or Support games since those stats are irrelevanrt
 
 ///need to add matchid, game duration,game type and whatever other info is on the matchitem type to the URL  
 
@@ -50,7 +48,7 @@ function PlayersInfo(props:any){
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  function MoreDetails(props:any) {
+  function MoreDetails() {
     ///Consider including this in the GameItem section instead
     get(`http://127.0.0.1:8000/cs_details/${match.id}/${match.puuid}/${match.region}/${match.type}/`).then((csdetails) =>{
       console.log(csdetails)///debugging
@@ -74,7 +72,6 @@ function PlayersInfo(props:any){
   ))}
     <div className='more-details'>
       <MoreDetails/>
-      {/*need to link this to the show the CS number thing*/}
     </div>
   </div>
 )}

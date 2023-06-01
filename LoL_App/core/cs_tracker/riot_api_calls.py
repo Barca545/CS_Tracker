@@ -106,50 +106,46 @@ class Match:
     
     def get_duration(self):
         return str(timedelta(seconds=self.match_dto['info']['gameDuration'])) #does this work?
+    
+def get_match_tl(region,match_id):
+    return lol_watcher.match.timeline_by_match(region,match_id)
 
-def get_match_tl(match_id:str, region:str):
-    return lol_watcher.match.timeline_by_match(region=region,match_id=match_id)
+#All of the below could possibly become methods of a Match TL object
 
-#All of the below could possibly become methods of the Match object
-
-def get_cs(match,minute:int,puuid:str):
-    player = match['metadata']['participants'].index(puuid)
-    cs_at = match['info']['frames'][minute]['participantFrames'][f'{player}']['minionsKilled']
+def get_cs(match_tl,minute:int,puuid:str):
+    player = match_tl['metadata']['participants'].index(puuid)+1
+    cs_at = match_tl['info']['frames'][minute]['participantFrames'][f'{player}']['minionsKilled']
     return(cs_at)
 
-def get_frames(match):
-    duration = len(match['info']['frames'])
+def get_frames(match_tl):
+    duration = len(match_tl['info']['frames'])
     frames = []
     for i in range(duration):
         frames.append(i)
     return(frames)
 
-def total_delta_CS(match,puuid:str):
-    frames = get_frames(match)
-    match_id = match['metadata']['matchId']
+def total_delta_CS(match_tl,puuid:str):
+    frames = get_frames(match_tl)
     cs = {}
     for frame in frames: 
-        cs_at = get_cs(match=match,minute=frame,puuid=puuid)
-        delta_cs = cs_at-get_cs(match=match,minute=frame-1,puuid=puuid)
-        cs[frame] = {f'CS @ {frame}':cs_at, 'Delta CS':delta_cs}
-    #Possibly use datetime lib to get this in a better format
-    cs[0] = {f'CS @ {0}':0,'Delta CS':0} 
-    cs_graph = {match_id:cs}
-    return(cs_graph)
+        cs_at = get_cs(match_tl=match_tl,minute=frame,puuid=puuid)
+        delta_cs = cs_at-get_cs(match_tl=match_tl,minute=frame-1,puuid=puuid)
+        cs[str(frame)] = delta_cs
+    cs["0"] = 0
+    return(cs)
 
-def total_problem_delta_CS(match,puuid:str,target=4):
-    frames = get_frames(match)
-    match_id = match['metadata']['matchId']
+def total_problem_delta_CS(match_tl,puuid:str,target=4):
+    frames = get_frames(match_tl)
     cs = {}   
     for frame in frames: 
-        cs_at = get_cs(match=match,minute=frame,puuid=puuid)
-        delta_cs = cs_at-get_cs(match=match,minute=frame-1,puuid=puuid)
+        cs_at = get_cs(match_tl=match_tl,minute=frame,puuid=puuid)
+        delta_cs = cs_at-get_cs(match_tl=match_tl,minute=frame-1,puuid=puuid)
         if frame > 2 and delta_cs < target:
-            cs[frame] = {f'CS @ {frame}':cs_at, 'Delta CS':delta_cs}
-    #Possibly use datetime lib to get this in a better format
-    cs[0] = {f'CS @ {0}':0,'Delta CS':0} 
-    cs_graph = {match_id:cs}
-    return(cs_graph)
+            cs[str(frame)] = delta_cs
+    cs["0"] = 0
+    return(cs)
+
+#everything below is just for testing delete in final build
 
 #test = Match('NA1_4665213017','envoker','na1').get_summoner_spells()
 #test = Match('NA1_4665213017','envoker','na1').get_summoner_list()
@@ -160,9 +156,32 @@ def total_problem_delta_CS(match,puuid:str,target=4):
 
 match = Match('NA1_4665213017','envoker','na1')
 
+match_tl = get_match_tl('na1','NA1_4665213017')
 
-test = get_cs(match,15)
+puuid = summoner = Summoner('na1','Envoker').get_puuid()
 
-print(test)
+def problem_delta_cs(match_id,puuid,type,region='na1'):
+    #matchlist needs to return outcome (maybe not, might be a pain), and champion
+    match_tl = get_match_tl(match_id=match_id,region=region) #could find a way to move this outside the function using state hooks and stuff
+    duration = len(match_tl['info']['frames'])
+    cspm = round(get_cs(match_tl=match_tl,minute=14,puuid=puuid)/(duration-1),1)
+    if duration < 15:
+        cs_15 = get_cs(match=match_tl,minute=15,puuid=puuid)
+    else:
+        cs_15 = 'Too Short'
+    delta_cs = total_delta_CS(match_tl,puuid) 
+    problem_cs = total_problem_delta_CS(match_tl,puuid) 
+    cs_results = {
+        'id':match_id,
+        #'outcome':
+        #'champion':
+        'cspm': cspm,
+        'type':type,
+        'cs15':cs_15,
+        'delta cs': delta_cs,
+        'problem cs':problem_cs,
+    }
+    return cs_results
 
-#need to debug the get_cs function
+test2 = problem_delta_cs(match_id='NA1_4670747465',puuid=puuid,type='Normal',region='na1')
+print(test2)
