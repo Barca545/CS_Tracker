@@ -4,6 +4,8 @@ from django.db import models
 
 #I think here is where I input the python functions I made earlier
 
+#these models need to be updated
+
 class CSData(models.Model):
     frame = models.CharField(max_length=60)
     cs = models.CharField(max_length=500)
