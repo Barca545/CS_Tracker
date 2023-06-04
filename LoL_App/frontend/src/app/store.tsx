@@ -4,6 +4,7 @@ import matchlistRequestReducer from "./slices/matchlistRequestSlice";
 import {combineReducers } from '@reduxjs/toolkit'
 import matchlistReducer from "./slices/matchlistSlice";
 import matchInfoReducer from "./slices/matchinfoSlice";
+import vodreviewReducer from "./slices/vodreviewSlice";
 
 ///try installing a logger for easier debugging: https://github.com/LogRocket/redux-logger
 
@@ -13,6 +14,7 @@ export const store =  configureStore({
     matchlistrequest: matchlistRequestReducer,
     matchlist:matchlistReducer,
     matchinfo:matchInfoReducer,
+    vodreview:vodreviewReducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware),
 })
