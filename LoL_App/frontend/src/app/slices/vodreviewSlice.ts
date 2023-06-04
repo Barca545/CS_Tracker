@@ -4,6 +4,7 @@ import { RootState } from '../store'
 
 const initialState:VODReviewCommentsState = {
     comments: [],
+    edit:null,
     responseStatus: null
 }
 
@@ -20,6 +21,11 @@ const vodreviewSlice = createSlice({
         /*might be a more performant way to do this but whatever */  
         const filteredcomments = state.comments?.filter((comment) => comment.id !== action.payload)
         state.comments = filteredcomments
+      },
+      editComment: (state,action:PayloadAction<string>) => {
+        const target = state.comments?.find((comment)=>comment.id == action.payload)
+        ///why is one potential value of target undefined?
+        state.edit = target 
       }
     }})
       
@@ -29,5 +35,9 @@ export default vodreviewSlice.reducer;
 ///Selectors
 export const getComments = (state:RootState) => {
   return state.vodreview.comments
+}
+
+export const getEdit = (state:RootState) => {
+  return state.vodreview.edit
 }
 

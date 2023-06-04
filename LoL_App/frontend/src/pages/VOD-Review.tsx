@@ -3,7 +3,7 @@ import  YouTubePlayer  from "react-youtube";
 import {v4 as uuid} from 'uuid';
 import { VODReviewComment } from "../services/types/vod-reviews-types";
 import { useAppDispatch,useAppSelector } from "../app/hooks";
-import {addComment,deleteComment,getComments} from '../app/slices/vodreviewSlice'
+import {addComment,deleteComment,getComments,getEdit} from '../app/slices/vodreviewSlice'
 
 ///installed uuid
 
@@ -51,8 +51,10 @@ const VideoPlayer = () => {
 
 const CommentSidebar = () => {
   ///possibly move this to the components folder
-  const comments = useAppSelector(getComments)
 
+  /*need a utility to show and hide the comment bar */
+
+  const comments = useAppSelector(getComments)
   return(
     <div className="comment-sidebar">
       {comments.map((comment) => (
@@ -69,9 +71,6 @@ const CommentSidebar = () => {
 
 const Comment = (comment:VODReviewComment) => {
   const dispatch = useAppDispatch()
-  /*eventually need to do an edit function 
-  to make the edit function work, I may need to make comments a key value of uuid:{timestamp,text}
-  */
 
   return(
     <>
@@ -89,14 +88,22 @@ const Comment = (comment:VODReviewComment) => {
 const CreateComment = () =>{
   const dispatch = useAppDispatch()
   const [inputText,setinputText] = useState(String)
-  const [inputTimestamp,setinputTimestamp] = useState(Number);
-  
+  const [inputTimestamp,setinputTimestamp] = useState(Number);  
+
+  /*basically what this should do is if edit changes replace the current comment with the
+  result of calling the getEdit selector 
+  may need to move the logic for definging the state from the savehandler to a useState hook
+  probably also need an update comment reducer that instead of just appending to the end 
+  replaces the element with the id matching the edit id.
+  */
   
   const saveHandler = () => {
     ///add a seperate action here that sends it to the the backend onsave
     const comment:VODReviewComment = 
     { id: uuid(),
-      ///once I get this hooked up to the YT thing I need to figure out the timestamping
+      /*once I get this hooked up to the YT thing I need to figure out the timestamping
+      might need to grab the timestamp in a slice whenever the comment thing is opened
+      */
       timestamp:1,
       text:inputText,
     }

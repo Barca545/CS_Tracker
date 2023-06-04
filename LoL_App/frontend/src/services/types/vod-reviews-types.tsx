@@ -7,5 +7,6 @@ export interface VODReviewComment{
 
 export interface VODReviewCommentsState{
     comments: VODReviewComment[],
-    responseStatus: string|null
+    edit: VODReviewComment|null|undefined, ///letting this be undefined might cause issues
+    responseStatus: string|null,
 }
