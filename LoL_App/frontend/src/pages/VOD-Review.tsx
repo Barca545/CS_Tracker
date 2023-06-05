@@ -5,31 +5,16 @@ import { useAppDispatch,useAppSelector } from "../app/hooks";
 import {addComment,deleteComment,editComment,getComments,getTimestamp,setTimestamp} from '../app/slices/vodreviewSlice'
 import ReactPlayer from "react-player";
 
-
 ///USING REACT-PLAYER NOT react-youtube OR video-react
 
 ///installed uuid
 
-/*once I get this hooked up to the YT thing I need to figure out the timestamping
-might need to grab the timestamp in a slice whenever the comment thing is opened
-*/
+///needs to play immediately after seeking
 
-const VODReviews = () => {
-  ///Try setting the time to seek to here and passing it down as a prop
-  const reactPlayerRef = useRef<ReactPlayer>(null);
-
-  return(
-    <>
-      <VideoPlayer playerRef={reactPlayerRef}/>
-         
-    </>
-  )
-}
-
-const VideoPlayer = (props:any) => {
+const VideoPlayer = () => {
   ///give users the option to set the title of the video
   const [URL,setURL] = useState('');
-  const reactPlayerRef:React.RefObject<ReactPlayer> = props.playerRef;
+  const reactPlayerRef = useRef<ReactPlayer>(null);
   const [timestamp,setTimestamp] = useState(0)
   const time = reactPlayerRef.current?.getCurrentTime()
   const dispatch = useAppDispatch()
@@ -40,6 +25,10 @@ const VideoPlayer = (props:any) => {
 
   const handleSeek = () => {
     reactPlayerRef.current?.seekTo(timestamp)
+  }
+
+  const setCurrentTime = () => {
+    return reactPlayerRef.current?.getCurrentTime
   }
 
   const ChooseVideo = () => {
@@ -194,12 +183,9 @@ const VideoPlayer = (props:any) => {
           }
         }}
       />
-    <button onClick={()=>handleSeek()}> Test 1</button>
     <CommentSidebar/>  
   </>
   )
 }
 
-
-
-export default VODReviews
+export default VideoPlayer
