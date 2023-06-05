@@ -6,5 +6,6 @@ export interface VODReviewComment{
 
 export interface VODReviewCommentsState{
     comments: VODReviewComment[],
+    currentTimestamp: number,
     responseStatus: string|null,
 }
