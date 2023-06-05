@@ -1,12 +1,15 @@
-import React, {useState} from "react";
+import React, {useState,useEffect} from "react";
 import  YouTubePlayer  from "react-youtube";
 import {v4 as uuid} from 'uuid';
 import { VODReviewComment } from "../services/types/vod-reviews-types";
 import { useAppDispatch,useAppSelector } from "../app/hooks";
-import {addComment,deleteComment,getComments,getEdit} from '../app/slices/vodreviewSlice'
+import {addComment,deleteComment,editComment,getComments} from '../app/slices/vodreviewSlice'
 
 ///installed uuid
 
+/*once I get this hooked up to the YT thing I need to figure out the timestamping
+might need to grab the timestamp in a slice whenever the comment thing is opened
+*/
 
 const VODReviews = () => {
   return(
@@ -71,39 +74,87 @@ const CommentSidebar = () => {
 
 const Comment = (comment:VODReviewComment) => {
   const dispatch = useAppDispatch()
+  ///issue with making 
+  const [editstate,setEditState] = useState(false)
+  
+  const EditComment = (props:any) =>{
+    /*seems to be working:
+    Next step is to add code that confirms it is updating in the store
+    finally, add code to make it turn back into a normal comment by toggling edit
+    */
+    const dispatch = useAppDispatch()
+    const id = props.id
+    const [inputText,setinputText] = useState(props.text)
+    const [inputTimestamp,setinputTimestamp] = useState(props.timestamp); 
+    
+  
+    const handleEdit = () => {
+      const comment:VODReviewComment = {
+        id: id,
+        timestamp:inputTimestamp,
+        text:inputText,
+      }
+      dispatch(editComment(comment))
+      console.log('comment edited')
+      setEditState(false)
+  
+    }
+    const handleCancel = () => {
+      const comment:VODReviewComment = {
+        id: id,
+        timestamp:props.timestamp,
+        text:props.text,
+      }
+      dispatch(editComment(comment))
+      console.log('comment canceled')
+      setEditState(false)
+    }
+  
+    return(
+      <>
+        <div className="create-comment">
+          <textarea
+          value={inputText}
+          placeholder="New Comment..."
+          onChange={(e) => {setinputText(e.target.value)}}
+          />
+        </div>
+        <div className="create-comment-footer">
+          <button className="comment-save" onClick={()=>handleEdit()}> Save Edits </button>
+          <button className="comment-save" onClick={()=>handleCancel()}> Cancel Edits </button>
+        </div>
+      </>
+    )
+  }
 
-  return(
-    <>
-      <div className="comment" key={comment.id} id={comment.id}>
-        {comment.text}
-      </div>
-      <div className="comment-footer">
-      <button onClick={()=>dispatch(deleteComment(comment.id))}>Delete</button>
-        <button> Edit</button>
-      </div>
-    </>
-  )
+  if (editstate==false) {
+    return(
+      <>
+        <div className="comment" key={comment.id} id={comment.id}>
+          {comment.text}
+        </div>
+        <div className="comment-footer">
+          <button onClick={()=>dispatch(deleteComment(comment.id))}>Delete</button>
+          <button onClick={()=>{setEditState(true)}}>Edit</button>
+        </div>
+      </>
+    )
+  }
+  else{
+    return(
+    <EditComment id={comment.id} text={comment.text} timestamp={comment.timestamp}/>
+    )}
 }
 
 const CreateComment = () =>{
   const dispatch = useAppDispatch()
   const [inputText,setinputText] = useState(String)
-  const [inputTimestamp,setinputTimestamp] = useState(Number);  
-
-  /*basically what this should do is if edit changes replace the current comment with the
-  result of calling the getEdit selector 
-  may need to move the logic for definging the state from the savehandler to a useState hook
-  probably also need an update comment reducer that instead of just appending to the end 
-  replaces the element with the id matching the edit id.
-  */
+  const [inputTimestamp,setinputTimestamp] = useState(Number); 
   
   const saveHandler = () => {
     ///add a seperate action here that sends it to the the backend onsave
     const comment:VODReviewComment = 
     { id: uuid(),
-      /*once I get this hooked up to the YT thing I need to figure out the timestamping
-      might need to grab the timestamp in a slice whenever the comment thing is opened
-      */
       timestamp:1,
       text:inputText,
     }
@@ -128,5 +179,6 @@ const CreateComment = () =>{
     </>
   )
 }
+
 
 export default VODReviews

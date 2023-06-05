@@ -4,9 +4,7 @@ export interface VODReviewComment{
     text:string
 }
 
-
 export interface VODReviewCommentsState{
     comments: VODReviewComment[],
-    edit: VODReviewComment|null|undefined, ///letting this be undefined might cause issues
     responseStatus: string|null,
 }
