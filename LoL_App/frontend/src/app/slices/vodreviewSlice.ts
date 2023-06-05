@@ -31,20 +31,13 @@ const vodreviewSlice = createSlice({
         text: commentedit.text,
        }
       },
-      setTimestamp: (state,action:PayloadAction<number>) => {
-        state.currentTimestamp = action.payload
-      }
     }})
       
-export const {addComment,deleteComment,editComment,setTimestamp} = vodreviewSlice.actions
+export const {addComment,deleteComment,editComment} = vodreviewSlice.actions
 export default vodreviewSlice.reducer;
 
 ///Selectors
 export const getComments = (state:RootState) => {
   return state.vodreview.comments
-}
-
-export const getTimestamp = (state:RootState) => {
-  return state.vodreview.currentTimestamp
 }
 
