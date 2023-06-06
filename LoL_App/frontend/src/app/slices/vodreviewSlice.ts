@@ -1,9 +1,13 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
-import { VODReviewComment,VODReviewCommentsState} from "../../services/types/vod-reviews-types";
+import { VODReviewComment,VODReviewState, Video} from "../../services/types/vod-reviews-types";
 import { RootState } from '../store'
 
-const initialState:VODReviewCommentsState = {
+const initialState:VODReviewState = {
     comments: [],
+    video: {
+      url: '',
+      title: ''
+    },
     currentTimestamp:0,
     responseStatus: null
 }
@@ -25,15 +29,21 @@ const vodreviewSlice = createSlice({
       editComment: (state,action:PayloadAction<VODReviewComment>) => {
         const commentedit = action.payload
         const editIndex = state.comments?.findIndex((comment)=>comment.id)
-       state.comments[editIndex] = {
+        state.comments[editIndex] = {
         id: commentedit.id,
         timestamp: commentedit.timestamp,
         text: commentedit.text,
        }
       },
+      setVideoTitle: (state, action:PayloadAction<string>) => {
+        state.video.title = action.payload
+      },
+      setVideoURL: (state, action:PayloadAction<string>) => {
+        state.video.url = action.payload
+      },
     }})
       
-export const {addComment,deleteComment,editComment} = vodreviewSlice.actions
+export const {addComment,deleteComment,editComment,setVideoTitle,setVideoURL} = vodreviewSlice.actions
 export default vodreviewSlice.reducer;
 
 ///Selectors
@@ -41,3 +51,7 @@ export const getComments = (state:RootState) => {
   return state.vodreview.comments
 }
 
+export const getVideo = (state:RootState) => {
+  console.log()
+  return state.vodreview.video
+}

@@ -4,8 +4,14 @@ export interface VODReviewComment{
     text:string
 }
 
-export interface VODReviewCommentsState{
+export interface Video {
+    url:string,
+    title:string,
+}
+
+export interface VODReviewState{
     comments: VODReviewComment[],
+    video: Video,
     currentTimestamp: number,
     responseStatus: string|null,
 }

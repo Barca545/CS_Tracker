@@ -1,8 +1,8 @@
-import React, {useState,useRef} from "react";
+import React, {useState,useRef, useEffect} from "react";
 import {v4 as uuid} from 'uuid';
-import { VODReviewComment} from "../services/types/vod-reviews-types";
+import { VODReviewComment, Video} from "../services/types/vod-reviews-types";
 import { useAppDispatch,useAppSelector } from "../app/hooks";
-import {addComment,deleteComment,editComment,getComments} from '../app/slices/vodreviewSlice'
+import {addComment,deleteComment,editComment,getComments,getVideo,setVideoTitle,setVideoURL} from '../app/slices/vodreviewSlice'
 import ReactPlayer from "react-player";
 
 ///USING REACT-PLAYER NOT react-youtube OR video-react
@@ -11,13 +11,22 @@ import ReactPlayer from "react-player";
 
 ///needs to play immediately after seeking
 
+
 const VideoPlayer = () => {
   ///give users the option to set the title of the video
-  const [URL,setURL] = useState('');
   const reactPlayerRef = useRef<ReactPlayer>(null);
-  const [timestamp,setTimestamp] = useState(0)
   const time = reactPlayerRef.current?.getCurrentTime()
   const dispatch = useAppDispatch()
+  const video = useAppSelector(getVideo)
+  const [videoTitle,setTitle] = useState(video.title)
+  const [videoURL,setURL] = useState(video.url)
+
+  ///use map to rerender
+
+  const handleSaveVideo = () => {
+    dispatch(setVideoURL(videoURL))
+    dispatch(setVideoURL(videoTitle))
+  } 
 
   /*steal the set duration thing as well from the below
   https://codesandbox.io/s/useref-for-react-player-qss7k*/
@@ -31,20 +40,9 @@ const VideoPlayer = () => {
     return reactPlayerRef.current?.getCurrentTime()
   }
 
-  const ChooseVideo = () => {
-    return(
-      <form>
-          <h4>Enter Youtube URL</h4>
-          <input type={"text"} value={URL} onChange={(e)=>setURL(e.target.value)}/>
-      </form>
-    )
-  } 
-  
   const CommentSidebar = () => {
-    ///possibly move this to the components folder
     /*need a utility to show and hide the comment bar 
     possibly make it display the full text of whatever comment is focused*/
-
     const comments = useAppSelector(getComments)
     return(
       <div className="comment-sidebar">
@@ -56,7 +54,6 @@ const VideoPlayer = () => {
           timestamp={comment.timestamp}
           text={comment.text}/> 
         ))}
-        <button onClick={()=>reactPlayerRef.current?.seekTo(120)}> Test 2</button>
       </div>
     )
   } 
@@ -147,7 +144,7 @@ const VideoPlayer = () => {
         timestamp:inputTimestamp,
         text:inputText,
       }
-      ///debugging
+
       dispatch(addComment(comment))
       setinputText('')
     }
@@ -179,11 +176,16 @@ const VideoPlayer = () => {
 
   return (
   <>
-    <ChooseVideo/>
+    <form>
+      <h4>Enter Youtube URL</h4>
+      <input type={"text"} value={videoURL} onChange={(e)=>setURL(e.target.value)}/>
+      <h4>Enter Video Title</h4>
+      <input type={"text"} value={videoTitle} onChange={(e)=>setTitle(e.target.value)}/>
+      <button onClick={()=>handleSaveVideo()}>Save Video</button>
+    </form>
     <ReactPlayer
-        url="https://www.youtube.com/watch?v=ddcTY2tn26w"
-        ///url={URL}
-        ref={reactPlayerRef}
+        ///url="https://www.youtube.com/watch?v=ddcTY2tn26w"
+        url={video.url}
         config={{
           youtube: {
             playerVars: { controls: 1 }
