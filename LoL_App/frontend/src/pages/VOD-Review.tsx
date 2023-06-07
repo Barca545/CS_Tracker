@@ -1,4 +1,4 @@
-import React, {useState,useRef, useEffect} from "react";
+import React, {useState,useRef} from "react";
 import {v4 as uuid} from 'uuid';
 import { VODReviewComment, Video} from "../services/types/vod-reviews-types";
 import { useAppDispatch,useAppSelector } from "../app/hooks";
@@ -13,7 +13,6 @@ import ReactPlayer from "react-player";
 
 
 const VideoPlayer = () => {
-  ///give users the option to set the title of the video
   const reactPlayerRef = useRef<ReactPlayer>(null);
   const time = reactPlayerRef.current?.getCurrentTime()
   const dispatch = useAppDispatch()
@@ -21,15 +20,43 @@ const VideoPlayer = () => {
   const [videoTitle,setTitle] = useState(video.title)
   const [videoURL,setURL] = useState(video.url)
 
-  ///use map to rerender
-
   const handleSaveVideo = () => {
     dispatch(setVideoURL(videoURL))
-    dispatch(setVideoURL(videoTitle))
+    dispatch(setVideoTitle(videoTitle))
+    setTitle('')
+    setURL('')
   } 
 
   /*steal the set duration thing as well from the below
   https://codesandbox.io/s/useref-for-react-player-qss7k*/
+
+  function timestampConverter(timestamp:string){
+    /*some math here is going wrong because 2:30 is being set to 2:03
+    my hunch is soem integer is being fucked up by parseInt
+    */
+    const count = timestamp.split(':').length
+    console.log(count)
+    if (count>=3) {
+      const [hoursstring, minutesstring, secondsstring] = timestamp.split(':');
+      const hours = parseInt(hoursstring)
+      const minutes = parseInt(minutesstring)
+      const seconds = parseInt(secondsstring)
+      const fulltime = (hours * 60 *60) + (minutes*60) + seconds
+      return fulltime
+    }
+    else if (count==2) {
+      const [minutesstring, secondsstring] = timestamp.split(':');
+      const minutes = parseInt(minutesstring)
+      const seconds = parseInt(secondsstring)
+      const fulltime = (minutes*60) + seconds
+      return fulltime
+    }
+    else {
+      const [secondsstring] = timestamp.split(':');
+      const seconds = parseInt(secondsstring)
+      return seconds
+    }
+  };
 
   const handleSeek = (time:number) => {
     reactPlayerRef.current?.seekTo(time)
@@ -64,18 +91,24 @@ const VideoPlayer = () => {
     const EditComment = (props:any) =>{
       const id = props.id
       const [inputText,setinputText] = useState(props.text)
-      const [inputTimestamp,setinputTimestamp] = useState<number>(props.timestamp); 
+      const [inputTimestamp,setInputTimestamp] = useState<string>(props.timestamp[1]); 
+      const [ouputTimestamp,setOutputTimestamp] = useState(0); 
+      
+      /*add feature that lets user set timestamp or set it to the current time*/
+      const handleTimestamp = (e:React.ChangeEvent<HTMLInputElement>) => {
+        setInputTimestamp(e.target.value)
+        const timestamp = timestampConverter(inputTimestamp)
+        setOutputTimestamp(timestamp)
+      }
       
       const handleEdit = () => {
         const comment:VODReviewComment = {
           id: id,
-          timestamp:inputTimestamp,
+          timestamp:[ouputTimestamp,inputTimestamp],
           text:inputText,
         }
         dispatch(editComment(comment))
-        console.log('comment edited')
         setEditState(false)
-    
       }
       const handleCancel = () => {
         const comment:VODReviewComment = {
@@ -84,7 +117,6 @@ const VideoPlayer = () => {
           text:props.text,
         }
         dispatch(editComment(comment))
-        console.log('comment canceled')
         setEditState(false)
       }
     
@@ -93,7 +125,7 @@ const VideoPlayer = () => {
           <input type="text" className="create-timestamp"
           value={inputTimestamp}
           placeholder="Set timestamp"
-          onChange={(e) => {setinputTimestamp(parseInt(e.target.value))}}
+          onChange={(e) => {handleTimestamp(e)}}
           />
           <div className="create-comment">
             <textarea
@@ -110,10 +142,10 @@ const VideoPlayer = () => {
       )
     }
   
-    if (editstate==false) {
+    if (editstate===false) {
       return(
         <div className="comment">
-          <div className="time-stamp" onClick={()=>handleSeek(comment.timestamp)}> {comment.timestamp} </div>
+          <div className="time-stamp" onClick={()=>handleSeek(comment.timestamp[0])}> {comment.timestamp[1]} </div>
           <div className="comment-body" key={comment.id} id={comment.id}>
             {comment.text}
           </div>
@@ -133,24 +165,26 @@ const VideoPlayer = () => {
   ///could possible make savehandler an if statement and then reuse create comment for edit comment
   const CreateComment = () =>{
     const [inputText,setinputText] = useState ('')
-    const [inputTimestamp,setinputTimestamp] = useState(0); 
+    const [inputTimestamp,setInputTimestamp] = useState(''); 
+    const [ouputTimestamp,setOutputTimestamp] = useState(0); 
     
     /*add feature that lets user set timestamp or set it to the current time*/
+    const handleTimestamp = (e:React.ChangeEvent<HTMLInputElement>) => {
+      setInputTimestamp(e.target.value)
+      const timestamp = timestampConverter(inputTimestamp)
+      setOutputTimestamp(timestamp)
+    }
 
     const saveHandler = () => {
       ///add a seperate action here that sends it to the the backend onsave
       const comment:VODReviewComment = 
       { id: uuid(),
-        timestamp:inputTimestamp,
+        timestamp:[ouputTimestamp,inputTimestamp],
         text:inputText,
       }
-
       dispatch(addComment(comment))
       setinputText('')
-    }
-
-    const handleTimestampInput = () => {
-      ///needs to convert a timestamp i.e. 3:12 into seconds  
+      setInputTimestamp('')
     }
     
     return(
@@ -158,7 +192,7 @@ const VideoPlayer = () => {
         <input type="text" className="create-timestamp"
         value={inputTimestamp}
         placeholder="Set timestamp"
-        onChange={(e) => {setinputTimestamp(parseInt(e.target.value))}}
+        onChange={(e) => {handleTimestamp(e)}}
         />
         <div className="create-comment">
           <textarea
@@ -168,7 +202,7 @@ const VideoPlayer = () => {
           />
         </div>
         <div className="create-comment-footer">
-          <button className="comment-save" onClick={saveHandler}> Save </button>
+          <input type="button" value='Save' className="comment-save" onClick={saveHandler}/>
         </div>
       </>
     )
@@ -181,8 +215,9 @@ const VideoPlayer = () => {
       <input type={"text"} value={videoURL} onChange={(e)=>setURL(e.target.value)}/>
       <h4>Enter Video Title</h4>
       <input type={"text"} value={videoTitle} onChange={(e)=>setTitle(e.target.value)}/>
-      <button onClick={()=>handleSaveVideo()}>Save Video</button>
+      <input type="button" value='Save Video' onClick={()=>handleSaveVideo()}></input>
     </form>
+    <h3>{video.title}</h3>
     <ReactPlayer
         ///url="https://www.youtube.com/watch?v=ddcTY2tn26w"
         url={video.url}
@@ -191,6 +226,7 @@ const VideoPlayer = () => {
             playerVars: { controls: 1 }
           }
         }}
+        ref={reactPlayerRef}
       />
     <CommentSidebar/>  
   </>

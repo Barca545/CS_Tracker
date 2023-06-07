@@ -1,6 +1,9 @@
 export interface VODReviewComment{
     id:string,
-    timestamp:number,///this might need to be a number
+    timestamp:[
+        number, ///seconds value 
+        string  ///display value
+    ],
     text:string
 }
 

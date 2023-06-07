@@ -39,7 +39,8 @@ const vodreviewSlice = createSlice({
         state.video.title = action.payload
       },
       setVideoURL: (state, action:PayloadAction<string>) => {
-        state.video.url = action.payload
+        const url = action.payload
+        state.video.url = url
       },
     }})
       
