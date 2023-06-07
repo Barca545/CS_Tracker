@@ -31,29 +31,32 @@ const VideoPlayer = () => {
   https://codesandbox.io/s/useref-for-react-player-qss7k*/
 
   function timestampConverter(timestamp:string){
-    /*some math here is going wrong because 2:30 is being set to 2:03
-    my hunch is soem integer is being fucked up by parseInt
+    /*
+     issue is that it is not waiting to parse for the full number it is doing it onchange
     */
     const count = timestamp.split(':').length
     console.log(count)
     if (count>=3) {
       const [hoursstring, minutesstring, secondsstring] = timestamp.split(':');
-      const hours = parseInt(hoursstring)
-      const minutes = parseInt(minutesstring)
-      const seconds = parseInt(secondsstring)
+      const hours = parseInt(hoursstring,10)
+      const minutes = parseInt(minutesstring,10)
+      const seconds = parseInt(secondsstring,10)
       const fulltime = (hours * 60 *60) + (minutes*60) + seconds
       return fulltime
     }
     else if (count==2) {
       const [minutesstring, secondsstring] = timestamp.split(':');
-      const minutes = parseInt(minutesstring)
-      const seconds = parseInt(secondsstring)
+      const minutes = parseInt(minutesstring,10)
+      console.log('minutes' +minutes)
+      const seconds = parseInt(secondsstring,10)
+      console.log('seconds' +seconds)
+      console.log('seconds string' +secondsstring)
       const fulltime = (minutes*60) + seconds
       return fulltime
     }
     else {
       const [secondsstring] = timestamp.split(':');
-      const seconds = parseInt(secondsstring)
+      const seconds = parseInt(secondsstring,10)
       return seconds
     }
   };
@@ -125,7 +128,8 @@ const VideoPlayer = () => {
           <input type="text" className="create-timestamp"
           value={inputTimestamp}
           placeholder="Set timestamp"
-          onChange={(e) => {handleTimestamp(e)}}
+          onChange={(e) => {setInputTimestamp(e.target.value)}}
+          onBlur={(e) => {handleTimestamp(e)}}
           />
           <div className="create-comment">
             <textarea
@@ -175,7 +179,7 @@ const VideoPlayer = () => {
       setOutputTimestamp(timestamp)
     }
 
-    const saveHandler = () => {
+    const handleSave = () => {
       ///add a seperate action here that sends it to the the backend onsave
       const comment:VODReviewComment = 
       { id: uuid(),
@@ -192,7 +196,8 @@ const VideoPlayer = () => {
         <input type="text" className="create-timestamp"
         value={inputTimestamp}
         placeholder="Set timestamp"
-        onChange={(e) => {handleTimestamp(e)}}
+        onChange={(e) => {setInputTimestamp(e.target.value)}}
+        onBlur={(e) => {handleTimestamp(e)}}
         />
         <div className="create-comment">
           <textarea
@@ -202,7 +207,7 @@ const VideoPlayer = () => {
           />
         </div>
         <div className="create-comment-footer">
-          <input type="button" value='Save' className="comment-save" onClick={saveHandler}/>
+          <input type="button" value='Save' className="comment-save" onClick={handleSave}/>
         </div>
       </>
     )
