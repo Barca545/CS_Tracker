@@ -67,7 +67,8 @@ const VideoPlayer = () => {
 
   const getCurrentTime = () => {
     ///figure out how to make this not return undefined 
-    return reactPlayerRef.current?.getCurrentTime()
+    const time = reactPlayerRef.current?.getCurrentTime()
+    return time
   }
 
   const CommentSidebar = () => {
