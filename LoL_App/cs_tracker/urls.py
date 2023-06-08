@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from cs_app.views import *  #Specify once done
+from cs_tracker.views import *  #Specify once done
 from users.views import *
 from rest_framework_simplejwt import views as jwt_views #added for the JWT auth 
 

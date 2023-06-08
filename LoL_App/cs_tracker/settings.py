@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist', #added for the JWT auth 
     'corsheaders', #added for the JWT auth 
-    'django_rename_app',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True #added for the JWT auth 
