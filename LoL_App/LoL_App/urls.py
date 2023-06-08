@@ -30,10 +30,10 @@ urlpatterns = [
     #All of the above may be unnecesary
     path("matchlist/<summoner_name>/<region>/<number>/", matchlist, name="matchlist"),
     path("cs_details/<match_id>/<puuid>/<region>/<type>/", problem_delta_cs, name="problem_delta_cs"),
-     path('token/', 
-          jwt_views.TokenObtainPairView.as_view(), 
-          name ='token_obtain_pair'),
-     path('token/refresh/', 
-          jwt_views.TokenRefreshView.as_view(), 
-          name ='token_refresh')
+    path('token/', 
+        jwt_views.TokenObtainPairView.as_view(), 
+        name ='token_obtain_pair'),
+    path('token/refresh/', 
+        jwt_views.TokenRefreshView.as_view(), 
+        name ='token_refresh')
 ]
