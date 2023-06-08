@@ -16,24 +16,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from core.views import *  #Specify once done
+from cs_app.views import *  #Specify once done
+from users.views import *
 from rest_framework_simplejwt import views as jwt_views #added for the JWT auth 
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", front, name="front"),
-    path("cs_data/", cs_data, name="cs_data"),
-    path("cs_data/<str:match_id>", cs_data_detail, name="cs_data_detail"), #used to say "detail, is that ok?"
-    path("player/", player, name="player"),
-    path("player/<str:match_id>", player_detail, name="player_detail"),#used to say "detail, is that ok?"
-    #All of the above may be unnecesary
-    path("matchlist/<summoner_name>/<region>/<number>/", matchlist, name="matchlist"),
-    path("cs_details/<match_id>/<puuid>/<region>/<type>/", problem_delta_cs, name="problem_delta_cs"),
-     path('token/', 
-          jwt_views.TokenObtainPairView.as_view(), 
-          name ='token_obtain_pair'),
-     path('token/refresh/', 
-          jwt_views.TokenRefreshView.as_view(), 
-          name ='token_refresh')
+    #these should be in a separate cs app urls file
+    path('', include('users.urls')),
+    path('', include('cs_app.urls')),
+    path('token/', 
+        jwt_views.TokenObtainPairView.as_view(), 
+        name ='token_obtain_pair'),
+    path('token/refresh/', 
+        jwt_views.TokenRefreshView.as_view(), 
+        name ='token_refresh'),
 ]
